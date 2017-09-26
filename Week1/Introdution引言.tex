@@ -5,20 +5,17 @@
 \geometry{a4paper,centering,scale=0.8}
 \usepackage{graphicx}
 \usepackage{amsmath}
-\usepackage{textcomp}
-\usepackage{amsthm}
-\usepackage{amssymb}
 \begin{document} 
 \hfuzz=\maxdimen
 \tolerance=10000
 \hbadness=10000
 \begin{CJK}{UTF8}{gbsn}  
-\title{\heiti Machine Learning}
-\author{赵燕}
+\title{Machine Learning 机器学习}
+\author{}
 \date{}
-\newpage
-\section{Introduction引言}
-\subsection{Welcome}
+\maketitle
+\part{Introduction引言}
+\section*{1.Welcome}
 \subparagraph*{}
  第一个视频主要讲了什么是机器学习，机器学习能做什么。
 \begin{itemize}
@@ -36,7 +33,7 @@
   \item Self-customizing programs\\
    E.g., Amazon, Netflix product recommendations
 \end{itemize}
-\subsection{What is Machine Learning?什么是机器学习}
+\section*{2.What is Machine Learning?什么是机器学习}
 \subparagraph*{}
 第一个机器学习的定义来自于 Arthur Samuel。他定义机器学习为，在不进行特定编程的情况下，给予计算机学习能力的领域。
 \subparagraph*{}
@@ -55,7 +52,7 @@ Supervised learning and Unsupervised learning.\\
 目前存在几种不同类型的学习算法。主要的两种类型被我们称之为监督学习（supervised learning）和无监督学习（unsupervised learning）。
 \subparagraph*{}
 其他的有，强化学习（Reinforcement learning）, 推荐系统（recommender systems）。也会提到应用学习算法的实用建议（Practical advice for applying learning algorithms）。
-\subsection{Intorduction Supervised Learning 监督学习}
+\section*{3.Supervised Learning 监督学习}
 \subparagraph*{}
 Supervised Learning ``right answers''given.监督学习指的就是我们给学习算法一个数据集，这个数据集由“正确答案”组成。
 \subparagraph*{}
@@ -63,9 +60,9 @@ Supervised Learning ``right answers''given.监督学习指的就是我们给学�
 
 \includegraphics[width=.8\textwidth]{price.png}
 \subparagraph*{}
-用术语来讲，这叫做回归问题。回归(Regression)这个词的意思是，我们在试着推测出这一系列连续值属性(Predict continuous valued outputR(price))。
+这个例子是回归问题。回归(Regression)这个词的意思是，我们在试着推测出这一系列连续值属性(Predict continuous valued outputR(price))。
 \subparagraph*{}
-例2：肿瘤样本的例子属于分类问题，其目标是推出一组离散结果。实际的分类问题中输出会不止两个值。预测肿瘤的恶性与否用到的特征，在机器学习问题中，可能会遇到不止一种特征。
+例2：肿瘤样本的例子属于分类问题，其目标是推出一组离散结果,实际分类问题中输出会不止两个值,预测肿瘤的恶性与否用到的特征，在机器学习问题中，可能会遇到不止一种特征。
 
 \includegraphics[width=.8\textwidth]{zhongliu.png}
 \subparagraph*{}
@@ -87,16 +84,134 @@ Supervised Learning ``right answers''given.监督学习指的就是我们给学�
 练习：
 
 \includegraphics[width=.8\textwidth]{2.png}
-\subsection{Intorduction Unsupervised Learning 无监督学习}
+\section*{4.Unsupervised Learning 无监督学习}
 \subparagraph*{}
-无监督学习中的数据没有任何标签或者是有相同的标签或者就是没标签，没有基于预测结果的反馈。但无监督学习算法可能会把这些数据分成不同的簇，叫做聚类算法(clustering)。
+无监督学习中的数据没有任何标签或者是有相同的标签或者就是没标签，没有基于预测结果的反馈。但无监督学习算法可能会把这些数据分成不同的簇，叫做聚类算法(Clustering)。
 \subparagraph*{}
-无监督学习或者聚类算法在其他领域有着大量应用：组织大型的计算机群(organize computing clusters)、社交网络分析(social network analysis)、
-市场分割中的应用(market segmentation)、天文数据分析(astronomical data analysis)。这些都是聚类的例子，聚类只是无监督学习的一种。
+Unsupervised learning allows us to approach problems with little or no idea what our results should look like. We can derive structure from data where we don't necessarily know the effect of the variables.
+
+With unsupervised learning there is no feedback based on the prediction results.
 \subparagraph*{}
-例1：基因问题，找到一种方法，将这些基因自动组合成类似或相关的不同变量，如寿命、位置、角色等。
+无监督学习或者聚类算法在其他领域有着大量应用：组织大型的计算机群(Organize computing clusters)、社交网络分析(Social network analysis)、
+市场分割中的应用(Market segmentation)、天文数据分析(Astronomical data analysis)。这些都是聚类的例子，聚类只是无监督学习的一种。
 \subparagraph*{}
-例2：非聚类问题，鸡尾酒宴问题，允许你在混乱的环境中找到结构。就是从重叠的音频中分离音频。
+例1：基因芯片问题，找到一种方法，将这些基因自动组合成类似或相关的不同变量，如寿命、位置、角色等。
+
+Clustering: Take a collection of 1,000,000 different genes, and find a way to automatically group these genes into groups that are somehow similar or related by different variables, such as lifespan, location, roles, and so on.
+\subparagraph*{}
+例2：非聚类问题，鸡尾酒宴问题，允许你在混乱的环境中找到结构。，两个人同时说话，每个麦克风都会录到两个人重叠的声音，就是从重叠的音频中分离音频。
+
+Non-clustering: The "Cocktail Party Algorithm", allows you to find structure in a chaotic environment. (i.e. identifying individual voices and music from a mesh of sounds at a cocktail party).
+
 代码：[W, s, v] = svd ((repmat(sum(x.$*$x,1),size(x,1),1).$*$x)$*$x');
+\subparagraph*{}
+使用Octave或者Matlab这类的工具实现这些算法
+\newpage
+
+\part{Linear egerssion with One Variable单变量线性回归}
+\section*{1.Model Representation模型表示}
+通过线性回归算法了解监督学习的例子
+
+\includegraphics[width=.8\textwidth]{3.png}
+
+\includegraphics[width=.6\textwidth]{4.png}
+
+假使我们回归问题的数量集(Training Set)如图所示：
+
+\includegraphics[width=.4\textwidth]{5.png}
+
+我们将要用来描述这个回归问题的标记如下:
+
+m 代表训练集中实例的数量
+
+x 代表特征/输入变量
+
+y 代表目标变量/输出变量
+
+(x,y) 代表训练集中的实例
+
+(x (i) ,y (i) ) 代表第 i 个观察实例
+
+h 代表学习算法的解决方案或函数也称为假设(hypothesis)
+
+\includegraphics[width=.8\textwidth]{6.png}
+
+如何表达h?
+
+\includegraphics[width=.4\textwidth]{8.png}
+
+因为只含有一个特征/输入变量,因此这样的问题叫作单变量线性回归问题
+
+\subparagraph*{}
+To describe the supervised learning problem slightly more formally, our goal is, given a training set, to learn a function h : X → Y so that h(x) is a “good” predictor for the corresponding value of y. For historical reasons, this function h is called a hypothesis. Seen pictorially, the process is therefore like this:
+
+\includegraphics[width=.4\textwidth]{7.png}
+
+When the target variable that we’re trying to predict is continuous, such as in our housing example, we call the learning problem a regression problem. When y can take on only a small number of discrete values (such as if, given the living area, we wanted to predict if a dwelling is a house or an apartment, say), we call it a classification problem.
+\section*{2.Cost Function代价函数}
+\includegraphics[width=.8\textwidth]{9.png}
+
+平方差代价函数是解决回归问题最常用的手段
+
+We can measure the accuracy of our hypothesis function by using a cost function. This takes an average difference (actually a fancier version of an average) of all the results of the hypothesis with inputs from x's and the actual output y's.
+
+\includegraphics[width=.4\textwidth]{11.png}
+
+\includegraphics[width=.8\textwidth]{10.png}
+
+To break it apart, it is 1/2 x¯ where x¯ is the mean of the squares of hθ(xi)−yi , or the difference between the predicted value and the actual value.
+
+This function is otherwise called the "Squared error function", or "Mean squared error". The mean is halved 1/2 as a convenience for the computation of the gradient descent, as the derivative term of the square function will cancel out the 1/2 term. The following image summarizes what the cost function does: 
+
+\subsection*{2.1 Cost Function-Intuition I代价函数的直观理解 I}
+
+\includegraphics[width=.8\textwidth]{12.png}
+
+代价函数我们要理解两个重要的函数：一个是假设函数，一个是代价函数
+
+\includegraphics[width=.8\textwidth]{13.png}
+
+当θ1=0.5时：
+
+\includegraphics[width=.8\textwidth]{14.png}
+
+当θ1=0时：假设函数是一条水平的直线
+
+\includegraphics[width=.8\textwidth]{15.png}
+
+回顾：任何一个θ1对应着一个不同的假设函数，或者说对应这左边一条不同的拟合直线，对于任意的θ1，你可以算出一个不同的J(θ1)的值，我们可以利用这些来求右边的值。
+
+\includegraphics[width=.8\textwidth]{16.png}
+
+找到一个θ1的值来将J(θ1)最小化，对于特定的训练样本，我们最后可以完美的拟合，这就是为什么最小化J(θ1)对应着寻找一个最佳拟合直线的目标。
+\subsection*{2.2 Cost Function-Intuition I代价函数的直观理解 II}
+
+\includegraphics[width=.6\textwidth]{17.png}
+
+\includegraphics[width=.8\textwidth]{18.png}
+
+\includegraphics[width=.8\textwidth]{19.png}
+
+右图会得到一个三维曲面图，改变横坐标轴的两个值会得到不同的代价函数J(θ0,θ1)，竖直方向的高度就代表代价函数的值，但是之后用用轮廓图来表示代价函数：
+
+\includegraphics[width=.8\textwidth]{20.png}
+
+轮廓图可以直观地观察代价函数，但是上图可以看出来不是很好的拟合，再看一个例子：
+
+\includegraphics[width=.8\textwidth]{21.png}
+
+\includegraphics[width=.8\textwidth]{22.png}
+
+\includegraphics[width=.8\textwidth]{23.png}
+
+虽然拟合不好，但是已经离最小值很近了， 因此误差平方和 或者说 训练样本和假设的距离的平方和 这个距离值的平方和 非常接近于最小值 尽管它还不是最小值。
+
+后面我们会遇到更复杂、更高维度、更多参数的情况，而这些情况是很难画出图的 因此更无法将其可视化，因此我们真正需要的是编写程序来找出这些最小化代价函数的θ0和θ1的值。
+
+\section*{3.Gradient Descent梯度下降}
+\subsection*{3.1 Gradient Descent Intuition梯度下降的直观理解}
+\subsection*{3.2 Gradient Descent for Liner Regression梯度下降的线性回归}
+
+
 \end{CJK}
 \end{document}

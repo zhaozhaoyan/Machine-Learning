@@ -1,21 +1,29 @@
-\documentclass{article}  
+\documentclass{article}
 \usepackage{CJKutf8}
 \usepackage{minted}
 \usepackage{geometry}
 \geometry{a4paper,centering,scale=0.8}
 \usepackage{graphicx}
 \usepackage{amsmath}
+\usepackage{textcomp}
+\usepackage{amsthm}
+\usepackage{amssymb}
+\usepackage{float}
+%可能用到的包
+\title{Machine Learning}
+\author{赵燕}
+\date{}
 \begin{document} 
 \hfuzz=\maxdimen
 \tolerance=10000
 \hbadness=10000
-\begin{CJK}{UTF8}{gbsn}  
-\title{Machine Learning 机器学习}
-\author{}
-\date{}
+\begin{CJK}{UTF8}{gbsn} 
 \maketitle
-\part{Introduction引言}
-\section*{1.Welcome}
+\tableofcontents
+\newpage
+
+\section{Introduction}
+\subsection{Welcome}
 \subparagraph*{}
  第一个视频主要讲了什么是机器学习，机器学习能做什么。
 \begin{itemize}
@@ -33,7 +41,7 @@
   \item Self-customizing programs\\
    E.g., Amazon, Netflix product recommendations
 \end{itemize}
-\section*{2.What is Machine Learning?什么是机器学习}
+\subsection{What is Machine Learning?}
 \subparagraph*{}
 第一个机器学习的定义来自于 Arthur Samuel。他定义机器学习为，在不进行特定编程的情况下，给予计算机学习能力的领域。
 \subparagraph*{}
@@ -52,7 +60,7 @@ Supervised learning and Unsupervised learning.\\
 目前存在几种不同类型的学习算法。主要的两种类型被我们称之为监督学习（supervised learning）和无监督学习（unsupervised learning）。
 \subparagraph*{}
 其他的有，强化学习（Reinforcement learning）, 推荐系统（recommender systems）。也会提到应用学习算法的实用建议（Practical advice for applying learning algorithms）。
-\section*{3.Supervised Learning 监督学习}
+\subsection{Supervised Learning}
 \subparagraph*{}
 Supervised Learning ``right answers''given.监督学习指的就是我们给学习算法一个数据集，这个数据集由“正确答案”组成。
 \subparagraph*{}
@@ -84,7 +92,7 @@ Supervised Learning ``right answers''given.监督学习指的就是我们给学�
 练习：
 
 \includegraphics[width=.8\textwidth]{2.png}
-\section*{4.Unsupervised Learning 无监督学习}
+\subsection{Unsupervised Learning}
 \subparagraph*{}
 无监督学习中的数据没有任何标签或者是有相同的标签或者就是没标签，没有基于预测结果的反馈。但无监督学习算法可能会把这些数据分成不同的簇，叫做聚类算法(Clustering)。
 \subparagraph*{}
@@ -108,8 +116,8 @@ Non-clustering: The "Cocktail Party Algorithm", allows you to find structure in 
 使用Octave或者Matlab这类的工具实现这些算法
 \newpage
 
-\part{Linear egerssion with One Variable单变量线性回归}
-\section*{1.Model Representation模型表示}
+\section{Liner Regerssion with One Variable}
+\subsection{Model Representation}
 通过线性回归算法了解监督学习的例子
 
 \includegraphics[width=.8\textwidth]{3.png}
@@ -122,17 +130,17 @@ Non-clustering: The "Cocktail Party Algorithm", allows you to find structure in 
 
 我们将要用来描述这个回归问题的标记如下:
 
-m 代表训练集中实例的数量
+m 代表训练集中实例的数量\\
 
-x 代表特征/输入变量
+x 代表特征/输入变量\\
 
-y 代表目标变量/输出变量
+y 代表目标变量/输出变量\\
 
-(x,y) 代表训练集中的实例
+(x,y) 代表训练集中的实例\\
 
-(x (i) ,y (i) ) 代表第 i 个观察实例
+(x (i) ,y (i) ) 代表第 i 个观察实例\\
 
-h 代表学习算法的解决方案或函数也称为假设(hypothesis)
+h 代表学习算法的解决方案或函数也称为假设(hypothesis)\\
 
 \includegraphics[width=.8\textwidth]{6.png}
 
@@ -148,7 +156,7 @@ To describe the supervised learning problem slightly more formally, our goal is,
 \includegraphics[width=.4\textwidth]{7.png}
 
 When the target variable that we’re trying to predict is continuous, such as in our housing example, we call the learning problem a regression problem. When y can take on only a small number of discrete values (such as if, given the living area, we wanted to predict if a dwelling is a house or an apartment, say), we call it a classification problem.
-\section*{2.Cost Function代价函数}
+\subsection{Cost Function}
 \includegraphics[width=.8\textwidth]{9.png}
 
 平方差代价函数是解决回归问题最常用的手段
@@ -163,7 +171,23 @@ To break it apart, it is 1/2 x¯ where x¯ is the mean of the squares of hθ(xi)
 
 This function is otherwise called the "Squared error function", or "Mean squared error". The mean is halved 1/2 as a convenience for the computation of the gradient descent, as the derivative term of the square function will cancel out the 1/2 term. The following image summarizes what the cost function does: 
 
-\subsection*{2.1 Cost Function-Intuition I代价函数的直观理解 I}
+\subsubsection{Cost Function-Intuition I}
+Hypothesis:
+\begin{equation*}
+  h_\theta(x)=\theta_0+\theta_1x
+\end{equation*}
+Parameters:
+\begin{equation*}
+  \theta_0,\theta_1
+\end{equation*}
+Cost Function:
+\begin{equation*}
+  J(\theta_0,\theta_1)=\frac{1}{2m}\sum_{k=1}^m{(h_\theta(x^{(i)})-y^{(i)})^2}
+\end{equation*}
+Goal:
+\begin{equation*}
+   \min_{\theta_{0},\theta_{1}} J(\theta_0,\theta_1)\
+\end{equation*}
 
 \includegraphics[width=.8\textwidth]{12.png}
 
@@ -184,7 +208,7 @@ This function is otherwise called the "Squared error function", or "Mean squared
 \includegraphics[width=.8\textwidth]{16.png}
 
 找到一个θ1的值来将J(θ1)最小化，对于特定的训练样本，我们最后可以完美的拟合，这就是为什么最小化J(θ1)对应着寻找一个最佳拟合直线的目标。
-\subsection*{2.2 Cost Function-Intuition I代价函数的直观理解 II}
+\subsubsection{Cost Function-Intuition II}
 
 \includegraphics[width=.6\textwidth]{17.png}
 
@@ -208,9 +232,35 @@ This function is otherwise called the "Squared error function", or "Mean squared
 
 后面我们会遇到更复杂、更高维度、更多参数的情况，而这些情况是很难画出图的 因此更无法将其可视化，因此我们真正需要的是编写程序来找出这些最小化代价函数的θ0和θ1的值。
 
-\section*{3.Gradient Descent梯度下降}
-\subsection*{3.1 Gradient Descent Intuition梯度下降的直观理解}
-\subsection*{3.2 Gradient Descent for Liner Regression梯度下降的线性回归}
+\subsection{Gradient Descent}
+梯度下降函数可以适用于多种多样的函数求解\\
+基本构想：
+
+\includegraphics[width=.8\textwidth]{24.png}
+
+梯度下降算法三维图：
+
+\includegraphics[width=.8\textwidth]{25.png}
+
+\includegraphics[width=.8\textwidth]{26.png}
+
+对梯度下降进行初始化，如此往复，达到第二个局部优处，如果从刚才的第一个点出发，会得到第一张图的局部最优解，但是如果你的起点偏移了一点，起点位置不同，到那时得到的是非常不同的局部最优解，这就是梯度下降的一个特点。
+
+梯度算法的定义：
+
+\includegraphics[width=.8\textwidth]{27.png}
+
+（1）梯度算法的微妙之处：如果想要更新这个等式，需要同时更新θ0和θ1的值。
+
+（2）实现方法：计算公式右边的部分，然后将计算出的结果存入temp0和temp1，然后同时更新θ0和θ1的值.
+
+（3）同时更新是梯度下降中的一种常用方法
+
+\includegraphics[width=.8\textwidth]{28.png}
+
+\subsubsection{Gradient Descent Intuition}
+
+\subsubsection{Gradient Descent for Liner Regression}
 
 
 \end{CJK}

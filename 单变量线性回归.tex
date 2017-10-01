@@ -20,6 +20,7 @@
 \begin{CJK}{UTF8}{gbsn} 
 \maketitle
 \renewcommand\contentsname{目录}
+\renewcommand\figurename{图}
 \tableofcontents
 \newpage
 
@@ -65,7 +66,7 @@ Supervised learning and Unsupervised learning.\\
 \subparagraph*{}
 Supervised Learning ``right answers''given.监督学习指的就是我们给学习算法一个数据集，这个数据集由“正确答案”组成。
 \subparagraph*{}
-例1：售楼的案例的数据是实现准确得到的，一个学生从波特兰俄勒冈州的研究所收集了一些房价的数据。你把这些数据画出来,看起来是这个样子:横轴表示房子的面积,单位是平方英尺,纵轴表示房价,单位是千美元。那基于这组数据,假如你有一个朋友,他有一套 750 平方英尺房子,现在他希望把房子卖掉,他想知道这房子能卖多少钱。如图 ~\ref{fig:price}所示。
+例1：售楼的案例的数据是实现准确得到的，一个学生从波特兰俄勒冈州的研究所收集了一些房价的数据。你把这些数据画出来,看起来是这个样子:横轴表示房子的面积,单位是平方英尺,纵轴表示房价,单位是千美元。那基于这组数据,假如你有一个朋友,他有一套 750 平方英尺房子,现在他希望把房子卖掉,他想知道这房子能卖多少钱。
 \begin{figure}[H]
 \center{\includegraphics[width=.8\textwidth]{price.png}}
 \caption{房价问题（描述）}
@@ -75,8 +76,11 @@ Supervised Learning ``right answers''given.监督学习指的就是我们给学�
 这个例子是回归问题。回归(Regression)这个词的意思是，我们在试着推测出这一系列连续值属性(Predict continuous valued outputR(price))。
 \subparagraph*{}
 例2：肿瘤样本的例子属于分类问题，其目标是推出一组离散结果,实际分类问题中输出会不止两个值,预测肿瘤的恶性与否用到的特征，在机器学习问题中，可能会遇到不止一种特征。
-
-\includegraphics[width=.8\textwidth]{zhongliu.png}
+\begin{figure}[H]
+\center{\includegraphics[width=.8\textwidth]{zhongliu.png}}
+\caption{肿瘤问题（描述）}
+\label{fig:zhongliu}
+\end{figure}
 \subparagraph*{}
 现在我用不同的符号来表示这些数据。既然我们把肿瘤的尺寸看做区分恶性或良性的特征,那么我可以这么画,我用不同的符号来表示良性和恶性肿瘤。或者说是负样本和正样本
 现在我们不全部画 X,良性的肿瘤改成用 O 表示,恶性的继续用 X 表示。来预测肿瘤的恶性与否。
@@ -85,17 +89,16 @@ Supervised Learning ``right answers''given.监督学习指的就是我们给学�
 或者说线索来做推测。如何处理怎么存出这些特征都存在问题，电脑内存会不够。用支持向量机来解决，可以让计算计处理无限多个特征。
 \subparagraph*{}
 在其它一些机器学习问题中,可能会遇到不止一种特征。举个例子,我们不仅知道肿瘤的尺寸,还知道对应患者的年龄。在其他机器学习问题中,我们通常有更多的特征,我朋友研究这个问题时,通常采用这些特征,比如肿块密度,肿瘤细胞尺寸的一致性和形状的一致性等等,还有一些其他的特征。这就是我们即将学到最有趣的学习算法之一。那种算法不仅能处理 2 种 3 种或 5 种特征,即使有无限多种特征都可以处理。
-
-\includegraphics[width=.8\textwidth]{1.png}
+\begin{figure}[H]
+\center{\includegraphics[width=.8\textwidth]{1.png}}
+\caption{机器学习的特征}
+\label{fig:1}
+\end{figure}
 \subparagraph*{}
 我列举了总共 5 种不同的特征,坐标轴上的两种和右边的 3 种,但是在一些学习问题中,你希望不只用 3 种或 5 种特征。相反,你想用无限多种特征,好让你的算法可以
 利用大量的特征,或者说线索来做推测。那你怎么处理无限多个特征,甚至怎么存储这些特征都存在问题,你电脑的内存肯定不够用。我们以后会讲一个算法,叫支持向量机,里面有一个巧妙的数学技巧,能让计算机处理无限多个特征。
 \subparagraph*{}
 监督学习。其基本思想是,我们数据集中的每个样本都有相应的“正确答案”。再根据这些样本作出预测,就像房子和肿瘤的例子中做的那样。我们还介绍了回归问题,即通过回归来推出一个连续的输出,之后我们介绍了分类问题,其目标是推出一组离散的结果。
-\subparagraph*{}
-练习：
-
-\includegraphics[width=.8\textwidth]{2.png}
 \subsection{Unsupervised Learning}
 \subparagraph*{}
 无监督学习中的数据没有任何标签或者是有相同的标签或者就是没标签，没有基于预测结果的反馈。但无监督学习算法可能会把这些数据分成不同的簇，叫做聚类算法(Clustering)。
@@ -118,19 +121,25 @@ Non-clustering: The "Cocktail Party Algorithm", allows you to find structure in 
 代码：[W, s, v] = svd ((repmat(sum(x.$*$x,1),size(x,1),1).$*$x)$*$x');
 \subparagraph*{}
 使用Octave或者Matlab这类的工具实现这些算法
-\newpage
-
 \section{Liner Regerssion with One Variable 单变量线性回归}
 \subsection{Model Representation}
 通过线性回归算法了解监督学习的例子
-
-\includegraphics[width=.8\textwidth]{3.png}
-
-\includegraphics[width=.6\textwidth]{4.png}
-
+\begin{figure}[H]
+\center{\includegraphics[width=.8\textwidth]{3.png}}
+\caption{房价模型表示}
+\label{fig:3}
+\end{figure}
+\begin{figure}[H]
+\center{\includegraphics[width=.8\textwidth]{4.png}}
+\caption{监督学习}
+\label{fig:4}
+\end{figure}
 假使我们回归问题的数量集(Training Set)如图所示：
-
-\includegraphics[width=.4\textwidth]{5.png}
+\begin{figure}[H]
+\center{\includegraphics[width=.8\textwidth]{5.png}}
+\caption{数量集 Training Set}
+\label{fig:5}
+\end{figure}
 
 我们将要用来描述这个回归问题的标记如下:
 
@@ -145,31 +154,44 @@ y 代表目标变量/输出变量\\
 (x (i) ,y (i) ) 代表第 i 个观察实例\\
 
 h 代表学习算法的解决方案或函数也称为假设(hypothesis)\\
-
-\includegraphics[width=.8\textwidth]{6.png}
+\begin{figure}[H]
+\center{\includegraphics[width=.8\textwidth]{6.png}}
+\caption{假设Hypothesis}
+\label{fig:6}
+\end{figure}
 
 如何表达h?
-
-\includegraphics[width=.4\textwidth]{8.png}
-
+\begin{figure}[H]
+\center{\includegraphics[width=.8\textwidth]{8.png}}
+\caption{如何表达h}
+\label{fig:8}
+\end{figure}
 因为只含有一个特征/输入变量,因此这样的问题叫作单变量线性回归问题
-
 \subparagraph*{}
 To describe the supervised learning problem slightly more formally, our goal is, given a training set, to learn a function h : X → Y so that h(x) is a “good” predictor for the corresponding value of y. For historical reasons, this function h is called a hypothesis. Seen pictorially, the process is therefore like this:
-
-\includegraphics[width=.4\textwidth]{7.png}
-
+\begin{figure}[H]
+\center{\includegraphics[width=.4\textwidth]{7.png}}
+\caption{假设函数}
+\label{fig:7}
+\end{figure}
 When the target variable that we’re trying to predict is continuous, such as in our housing example, we call the learning problem a regression problem. When y can take on only a small number of discrete values (such as if, given the living area, we wanted to predict if a dwelling is a house or an apartment, say), we call it a classification problem.
 \subsection{Cost Function}
-\includegraphics[width=.8\textwidth]{9.png}
-
+\begin{figure}[H]
+\center{\includegraphics[width=.8\textwidth]{9.png}}
+\caption{代价函数 CostFunction}
+\label{fig:9}
+\end{figure}
 平方差代价函数是解决回归问题最常用的手段
 
 We can measure the accuracy of our hypothesis function by using a cost function. This takes an average difference (actually a fancier version of an average) of all the results of the hypothesis with inputs from x's and the actual output y's.
-
-\includegraphics[width=.4\textwidth]{11.png}
-
-\includegraphics[width=.8\textwidth]{10.png}
+\begin{equation*}
+  J(\theta_0,\theta_1)=\frac{1}{2m}\sum_{k=1}^m{(\hat{y_i}-y_i)^2}=\frac{1}{2m}\sum_{k=1}^m{(h_\theta(x^{(i)})-y^{(i)})^2}
+\end{equation*}
+\begin{figure}[H]
+\center{\includegraphics[width=.8\textwidth]{10.png}}
+\caption{代价函数}
+\label{fig:10}
+\end{figure}
 
 To break it apart, it is 1/2 x¯ where x¯ is the mean of the squares of hθ(xi)−yi , or the difference between the predicted value and the actual value.
 
@@ -192,76 +214,119 @@ Goal:
 \begin{equation*}
    \min_{\theta_{0},\theta_{1}} J(\theta_0,\theta_1)\
 \end{equation*}
-
-\includegraphics[width=.8\textwidth]{12.png}
-
-代价函数我们要理解两个重要的函数：一个是假设函数，一个是代价函数
-
-\includegraphics[width=.8\textwidth]{13.png}
-
-当θ1=0.5时：
-
-\includegraphics[width=.8\textwidth]{14.png}
-
-当θ1=0时：假设函数是一条水平的直线
-
-\includegraphics[width=.8\textwidth]{15.png}
-
+\begin{figure}[H]
+\center{\includegraphics[width=.8\textwidth]{12.png}}
+\caption{假设函数的简化}
+\label{fig:12}
+\end{figure}
+代价函数我们要理解两个重要的函数：一个是假设函数，一个是代价函数\\
+当$\theta$1等于1时：
+\begin{figure}[H]
+\center{\includegraphics[width=.8\textwidth]{13.png}}
+\caption{$\theta$1等于1}
+\label{fig:13}
+\end{figure}
+当$\theta$1等于0.5时：
+\begin{figure}[H]
+\center{\includegraphics[width=.8\textwidth]{14.png}}
+\caption{$\theta$1等于0.5}
+\label{fig:14}
+\end{figure}
+当$\theta$1等于0时：假设函数是一条水平的直线
+\begin{figure}[H]
+\center{\includegraphics[width=.8\textwidth]{15.png}}
+\caption{$\theta$1等于0}
+\label{fig:15}
+\end{figure}
 回顾：任何一个θ1对应着一个不同的假设函数，或者说对应这左边一条不同的拟合直线，对于任意的θ1，你可以算出一个不同的J(θ1)的值，我们可以利用这些来求右边的值。
-
-\includegraphics[width=.8\textwidth]{16.png}
-
+\begin{figure}[H]
+\center{\includegraphics[width=.8\textwidth]{16.png}}
+\caption{$\theta$1的各种情况}
+\label{fig:16}
+\end{figure}
 找到一个θ1的值来将J(θ1)最小化，对于特定的训练样本，我们最后可以完美的拟合，这就是为什么最小化J(θ1)对应着寻找一个最佳拟合直线的目标。
 \subsubsection{Cost Function-Intuition II}
-
-\includegraphics[width=.6\textwidth]{17.png}
-
-\includegraphics[width=.8\textwidth]{18.png}
-
-\includegraphics[width=.8\textwidth]{19.png}
-
+Hypothesis:
+\begin{equation*}
+  h_\theta(x)=\theta_0+\theta_1x
+\end{equation*}
+Parameters:
+\begin{equation*}
+  \theta_0,\theta_1
+\end{equation*}
+Cost Function:
+\begin{equation*}
+  J(\theta_0,\theta_1)=\frac{1}{2m}\sum_{k=1}^m{(h_\theta(x^{(i)})-y^{(i)})^2}
+\end{equation*}
+Goal:
+\begin{equation*}
+   \min_{\theta_{0},\theta_{1}} J(\theta_0,\theta_1)\
+\end{equation*}
+\begin{figure}[H]
+\center{\includegraphics[width=.8\textwidth]{18.png}}
+\caption{代价函数的直观理解}
+\label{fig:18}
+\end{figure}
+\begin{figure}[H]
+\center{\includegraphics[width=.6\textwidth]{19.png}}
+\caption{三维曲面图}
+\label{fig:19}
+\end{figure}
 右图会得到一个三维曲面图，改变横坐标轴的两个值会得到不同的代价函数J(θ0,θ1)，竖直方向的高度就代表代价函数的值，但是之后用用轮廓图来表示代价函数：
-
-\includegraphics[width=.8\textwidth]{20.png}
-
+\begin{figure}[H]
+\center{\includegraphics[width=.8\textwidth]{20.png}}
+\caption{轮廓图表示}
+\label{fig:20}
+\end{figure}
 轮廓图可以直观地观察代价函数，但是上图可以看出来不是很好的拟合，再看一个例子：
-
-\includegraphics[width=.8\textwidth]{21.png}
-
-\includegraphics[width=.8\textwidth]{22.png}
-
-\includegraphics[width=.8\textwidth]{23.png}
-
-虽然拟合不好，但是已经离最小值很近了， 因此误差平方和 或者说 训练样本和假设的距离的平方和 这个距离值的平方和 非常接近于最小值 尽管它还不是最小值。
-
+\begin{figure}[H]
+\center{\includegraphics[width=.8\textwidth]{21.png}}
+\caption{拟合1}
+\label{fig:21}
+\end{figure}
+\begin{figure}[H]
+\center{\includegraphics[width=.8\textwidth]{22.png}}
+\caption{拟合2}
+\label{fig:22}
+\end{figure}
+\begin{figure}[H]
+\center{\includegraphics[width=.8\textwidth]{23.png}}
+\caption{拟合3}
+\label{fig:23}
+\end{figure}
+虽然拟合不好，但是已经离最小值很近了， 因此误差平方和 或者说 训练样本和假设的距离的平方和 这个距离值的平方和 非常接近于最小值 尽管它还不是最小值。\\
 后面我们会遇到更复杂、更高维度、更多参数的情况，而这些情况是很难画出图的 因此更无法将其可视化，因此我们真正需要的是编写程序来找出这些最小化代价函数的θ0和θ1的值。
-
 \subsection{Gradient Descent}
 梯度下降函数可以适用于多种多样的函数求解\\
 基本构想：
-
-\includegraphics[width=.8\textwidth]{24.png}
-
+\begin{figure}[H]
+\center{\includegraphics[width=.8\textwidth]{24.png}}
+\caption{梯度下降算法}
+\label{fig:24}
+\end{figure}
 梯度下降算法三维图：
-
-\includegraphics[width=.8\textwidth]{25.png}
-
-\includegraphics[width=.8\textwidth]{26.png}
-
+\begin{figure}[H]
+\center{\includegraphics[width=.6\textwidth]{25.png}}
+\caption{三维图一}
+\label{fig:25}
+\end{figure}
+\begin{figure}[H]
+\center{\includegraphics[width=.6\textwidth]{26.png}}
+\caption{三维图二}
+\label{fig:26}
+\end{figure}
 对梯度下降进行初始化，如此往复，达到第二个局部优处，如果从刚才的第一个点出发，会得到第一张图的局部最优解，但是如果你的起点偏移了一点，起点位置不同，到那时得到的是非常不同的局部最优解，这就是梯度下降的一个特点。
-
-梯度算法的定义：
-
-\includegraphics[width=.8\textwidth]{27.png}
-
+\subparagraph*{}
 （1）梯度算法的微妙之处：如果想要更新这个等式，需要同时更新θ0和θ1的值。
-
+\subparagraph*{}
 （2）实现方法：计算公式右边的部分，然后将计算出的结果存入temp0和temp1，然后同时更新θ0和θ1的值.
-
+\subparagraph*{}
 （3）同时更新是梯度下降中的一种常用方法
-
-\includegraphics[width=.8\textwidth]{28.png}
-
+\begin{figure}[H]
+\center{\includegraphics[width=.8\textwidth]{28.png}}
+\caption{梯度下降算法的定义及同时更新}
+\label{fig:28}
+\end{figure}
 \subsubsection{Gradient Descent Intuition}
 
 \subsubsection{Gradient Descent for Liner Regression}

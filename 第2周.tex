@@ -271,14 +271,87 @@ eg. if x1 has range 1 - 1000 then range of $x_1^2$ becomes 1 - 1000000 and that 
 \end{figure}
 \section{Computer Parameters Analytically}
 \subsection{Normal Equation}
-
+正规方程：针对某些问题，正规方程有更好的解决方案。
+\begin{figure}[H]
+\center{\includegraphics[width=.8\textwidth]{231.png}}
+\caption{Intuition}
+\label{fig:231}
+\end{figure}
+\subparagraph*{}
+正规方程通过求解下面的方程来找出使得代价函数最小的参数的$\theta$:
+\begin{equation}
+\frac{\partial}{\partial\theta_j}J(\theta_j)=0
+\end{equation}
+\subparagraph*{}
+假使我们的训练集特征为X（包含了$x_0$=1），并且我们的训练集结果为向量y，则利用正规方程解出向量
+\begin{equation}
+\theta=(X_TX)^{-1}X^Ty
+\end{equation}
+注释：
+上标T代表矩阵转置，上标-1代表矩阵的逆。设矩阵$A=X_TX$,则：$(X_TX)^{-1}=A^{-1}$
+\subparagraph*{}
+以下数据为例：
+\begin{figure}[H]
+\center{\includegraphics[width=.6\textwidth]{232.png}}
+\caption{房价问题：正规方程}
+\label{fig:232}
+\end{figure}
+\subparagraph*{}
+\begin{figure}[H]
+\center{\includegraphics[width=.4\textwidth]{233.png}}
+\caption{数据表格}
+\label{fig:233}
+\end{figure}
+\subparagraph*{}
+运用正规方程求解参数：
+\begin{figure}[H]
+\center{\includegraphics[width=.6\textwidth]{234.png}}
+\caption{运用正规方程求解参数}
+\label{fig:234}
+\end{figure}
+\subparagraph*{}
+在Octave中，正规方程\begin{equation}
+\theta=(X_TX)^{-1}X^Ty
+\end{equation}
+\subparagraph*{}
+写作：
+\begin{equation}
+pinv(X'*X)*X'*y
+\end{equation}
+\subparagraph*{}
+注意：对于那些不可逆的矩阵(通常是因为特征之间不独立,如同时包含英尺为单位的尺寸和米为单位的尺寸两个特征,也有可能是特征数量大于训练集的数量),正规方程方法是不能用的。
+\subparagraph*{}
+梯度下降与正规方程的比较：
+\begin{figure}[H]
+\center{\includegraphics[width=.8\textwidth]{235.png}}
+\caption{梯度下降与正规方程的比较}
+\label{fig:235}
+\end{figure}
+\subparagraph*{}
+总结:只要特征变量的数目并不大,标准方程是一个很好的计算参数 $\theta$的替代方法。具体地说,只要特征变量数量小于一万,我通常使用标准方程法,而不使用梯度下降法。
+\subparagraph*{}
+\begin{figure}[H]
+\center{\includegraphics[width=.8\textwidth]{237.png}}
+\caption{Gradient Descent or Normal Equation}
+\label{fig:237}
+\end{figure}
+\subparagraph*{}
+With the normal equation, computing the inversion has complexity $\\bigcirc(n^3)$. So if we have a very large number of features, the normal equation will be slow. In practice, when n exceeds 10,000 it might be a good time to go from a normal solution to an iterative process.
 \subsection{Normal Equation Noninvertibility}
-
-\section{Submitting Programming Assignments}
-
-\subsection{Working on and Submitting  Programming}
-
-\subsection{Programming tips from Mentors}
-
+\subparagraph*{}
+When implementing the normal equation in octave we want to use the 'pinv' function rather than 'inv.' The 'pinv' function will give you a value of $\theta$ even if $X^TX$ is not invertible. 
+\subparagraph*{}
+If $X^TX$ is noninvertible, the common causes might be having :
+\subparagraph*{}
+(1)Redundant features, where two features are very closely related (i.e. they are linearly dependent)
+\subparagraph*{}
+(2)Too many features (e.g. m ≤ n). In this case, delete some features or use "regularization" (to be explained in a later lesson).
+\begin{figure}[H]
+\center{\includegraphics[width=.8\textwidth]{238.png}}
+\caption{Non-invertible}
+\label{fig:238}
+\end{figure}
+\subparagraph*{}
+Solutions to the above problems include deleting a feature that is linearly dependent with another or deleting one or more features when there are too many features.
 \end{CJK}
 \end{document}

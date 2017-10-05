@@ -26,12 +26,47 @@
 
 \section{Classification and Representation}
 \subsection{Classification}
+\subparagraph{}
+在分类问题中，需要预测的变量y是离散的值，引出要学习的逻辑回归算法（Logistic Regression），这是目前最流行使用的一种学习算法。
+\subparagraph{}
+分类问题举例：
+\subparagraph{}
+（1）判断一封电子邮件是否是垃圾邮件；
+\subparagraph{}
+（2）判断一次金融交易是否是欺诈；
+\subparagraph{}
+（3）判断肿瘤是 良性还是恶性；
+\begin{figure}[H]
+\center{\includegraphics[width=.8\textwidth]{301.png}}
+\caption{分类问题举例}
+\label{fig:301}
+\end{figure}
+\subparagraph{}
+从二元的问题开始讨论：
+\subparagraph{}
+将因变量（dependent variable）可能属于两个类分别称为负向类（negative class）和正向类（positive class），则因变量$y\in{\{0,1}\}$，其中0表示负向类，1表示正向类。
+\begin{figure}[H]
+\center{\includegraphics[width=.8\textwidth]{302.png}}
+\caption{图示}
+\label{fig:302}
+\end{figure}
+\subparagraph{}
+如果我们要用线性回归算法来解决一个分类问题,对于分类,y 取值为 0 或者 1,但如果你使用的是线性回归,那么假设函数的输出值可能远大于 1,或者远小于 0,即使所有训练样本的标签 y 都等于 0 或 1。尽管我们知道标签应该取值 0 或者 1,但是如果算法得到的值远大于 1 或者远小于 0 的话,就会感觉很奇怪。所以我们在接下来的要研究的算法就叫做逻辑回归算法,这个算法的性质是:它的输出值永远在 0 到 1 之间。
+\begin{figure}[H]
+\center{\includegraphics[width=.8\textwidth]{303.png}}
+\caption{逻辑回归算法}
+\label{fig:303}
+\end{figure}
+\subparagraph{}
+逻辑回归算法是分类算法，我们将它作为分类算法使用，有时候可能因为这个算法的名字中出现了“回归”使你感到困惑，但逻辑回归算法实际上是一种分类算法，它适用于标签y取值离散的情况下，如：1 ，0， 0， 1 。
 \subsection{Hpothesis Representation}
 \subsection{Decision Boundary}
+
 \section{Logistic Regression Model}
 \subsection{Cost Function}
 \subsection{Simplified Cost Function and Gradient Descent}
-\subsection{Advanced Optimization}
+\subsection{Advanced Optimization} 
+
 \section{Multiclass Classification}
 \subsection{Multiclass Classification:One-vs-all}
 \subparagraph*{}

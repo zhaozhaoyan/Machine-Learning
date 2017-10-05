@@ -27,6 +27,8 @@
 \section{Classification and Representation}
 \subsection{Classification}
 \subparagraph{}
+To attempt classification, one method is to use linear regression and map all predictions greater than 0.5 as a 1 and all less than 0.5 as a 0. However, this method doesn't work well because classification is not actually a linear function.
+\subparagraph{}
 在分类问题中，需要预测的变量y是离散的值，引出要学习的逻辑回归算法（Logistic Regression），这是目前最流行使用的一种学习算法。
 \subparagraph{}
 分类问题举例：
@@ -51,6 +53,8 @@
 \label{fig:302}
 \end{figure}
 \subparagraph{}
+The classification problem is just like the regression problem, except that the values we now want to predict take on only a small number of discrete values. For now, we will focus on the binary classification problem in which y can take on only two values, 0 and 1. (Most of what we say here will also generalize to the multiple-class case.) For instance, if we are trying to build a spam classifier for email, then x(i) may be some features of a piece of email, and y may be 1 if it is a piece of spam mail, and 0 otherwise. Hence, y∈{0,1}. 0 is also called the negative class, and 1 the positive class, and they are sometimes also denoted by the symbols “-” and “+.” Given x(i), the corresponding y(i) is also called the label for the training example.
+\subparagraph{}
 如果我们要用线性回归算法来解决一个分类问题,对于分类,y 取值为 0 或者 1,但如果你使用的是线性回归,那么假设函数的输出值可能远大于 1,或者远小于 0,即使所有训练样本的标签 y 都等于 0 或 1。尽管我们知道标签应该取值 0 或者 1,但是如果算法得到的值远大于 1 或者远小于 0 的话,就会感觉很奇怪。所以我们在接下来的要研究的算法就叫做逻辑回归算法,这个算法的性质是:它的输出值永远在 0 到 1 之间。
 \begin{figure}[H]
 \center{\includegraphics[width=.8\textwidth]{303.png}}
@@ -60,6 +64,62 @@
 \subparagraph{}
 逻辑回归算法是分类算法，我们将它作为分类算法使用，有时候可能因为这个算法的名字中出现了“回归”使你感到困惑，但逻辑回归算法实际上是一种分类算法，它适用于标签y取值离散的情况下，如：1 ，0， 0， 1 。
 \subsection{Hpothesis Representation}
+\subparagraph{}
+假设函数表达式：
+\subparagraph{}
+我们希望分类器的输出在0和1之间，因此，要想出一个满足某个性质的假设函数，这个性质是它的预测值要在0和1之间。
+\subparagraph{}
+回顾肿瘤分类问题：可以用线性回归的方法求出一条适合数据的一条直线：
+\begin{figure}[H]
+\center{\includegraphics[width=.8\textwidth]{304.png}}
+\caption{肿瘤分类线性回归}
+\label{fig:304}
+\end{figure}
+\subparagraph{}
+根据线性回归我们只能预测连续的值，然而对于分类问题，我们要输出0或1，我们可以预测：
+（1）当$h_\theta$大于等于 0.5 时,预测 y=1;
+（2）当 $h_\theta$ 小于 0.5 时,预测 y=0 对于上图所示的数据,这样的一个线性模型似乎能很好地完成分类任务。假使我们又观测到一个非常大尺寸的恶性肿瘤,将其作为实例加入到我们的训练集中来,这将使得我们获得一条新的直线。
+\begin{figure}[H]
+\center{\includegraphics[width=.8\textwidth]{305.png}}
+\caption{肿瘤问题线性回归超范围}
+\label{fig:305}
+\end{figure}
+\subparagraph{}
+这时，再使用 0.5 作为阀值来预测肿瘤是良性还是恶性便不合适了。可以看出线性回归模型，因为其预测的值可以超越[0,1]的范围，并不适合解决这样的问题。
+\subparagraph{}
+引入一个新的模型，逻辑回归，该模型的输出变量范围始终在 0 和 1 之间。
+\subparagraph{}
+逻辑回归模型的假设是:
+\begin{equation}
+h_\theta(x)=g(\theta^Tx)
+\end{equation}
+其中：
+\subparagraph{}
+x:代表特征向量；
+\subparagraph{}
+g:代表逻辑函数(logistic function)，是一个常用的逻辑函数为 S 形函数(Sigmoid function)，公式为:
+\begin{equation}
+g(z)=\frac{1}{1+e^{-z}}
+\end{equation}
+\subparagraph{}
+该函数的图像为：
+\begin{figure}[H]
+\center{\includegraphics[width=.8\textwidth]{306.png}}
+\caption{逻辑函数（S函数）图像}
+\label{fig:306}
+\end{figure}
+\subparagraph{}
+逻辑回归模型的假设：
+\begin{equation}
+h_\theta(x)=\frac{1}{1+e^{-\theta^Tx}}
+\end{equation}
+\subparagraph{}
+$h_\theta(x)$的作用是,对于给定的输入变量,根据选择的参数计算输出变量=1 的可能性(estimated probablity)即
+\begin{equation}
+h_\theta(x)=P(y=1|x;\theta)
+\end{equation}
+\subparagraph{}
+例如，如果对于给定的 x，通过已经确定的参数计算得出$h_\theta(x)=0.7$,则表示有 70\%{}的几率 y 为正向类,相应地 y 为负向类的几率为 1-0.7=0.3。
 \subsection{Decision Boundary}
 
 \section{Logistic Regression Model}

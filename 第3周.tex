@@ -87,6 +87,8 @@ The classification problem is just like the regression problem, except that the 
 \subparagraph{}
 这时，再使用 0.5 作为阀值来预测肿瘤是良性还是恶性便不合适了。可以看出线性回归模型，因为其预测的值可以超越[0,1]的范围，并不适合解决这样的问题。
 \subparagraph{}
+We could approach the classification problem ignoring the fact that y is discrete-valued, and use our old linear regression algorithm to try to predict y given x. However, it is easy to construct examples where this method performs very poorly. Intuitively, it also doesn’t make sense for hθ(x) to take values larger than 1 or smaller than 0 when we know that y ∈ {0, 1}. To fix this, let’s change the form for our hypotheses hθ(x) to satisfy 0≤hθ(x)≤1. This is accomplished by plugging θTx into the Logistic Function.
+\subparagraph{}
 引入一个新的模型，逻辑回归，该模型的输出变量范围始终在 0 和 1 之间。
 \subparagraph{}
 逻辑回归模型的假设是:
@@ -108,6 +110,13 @@ g(z)=\frac{1}{1+e^{-z}}
 \caption{逻辑函数（S函数）图像}
 \label{fig:306}
 \end{figure}
+\begin{figure}[H]
+\center{\includegraphics[width=.8\textwidth]{308.png}}
+\caption{逻辑函数表达式及图像}
+\label{fig:308}
+\end{figure}
+\subparagraph{}
+The function g(z), shown here, maps any real number to the (0, 1) interval, making it useful for transforming an arbitrary-valued function into a function better suited for classification.
 \subparagraph{}
 逻辑回归模型的假设：
 \begin{equation}
@@ -119,6 +128,14 @@ $h_\theta(x)$的作用是,对于给定的输入变量,根据选择的参数计�
 h_\theta(x)=P(y=1|x;\theta)
 \end{equation}
 \subparagraph{}
+$h_\theta(x)$will give us the probability that our output is 1. 
+\subparagraph{}
+\begin{equation}
+h_\theta(x)=P(y=1|x;\theta)=1-P(y=0|x;\theta)
+\end{equation}
+\begin{equation}
+P(y=0|x;\theta)+P(y=1|x;\theta)=1
+\end{equation}
 例如，如果对于给定的 x，通过已经确定的参数计算得出$h_\theta(x)=0.7$,则表示有 70\%{}的几率 y 为正向类,相应地 y 为负向类的几率为 1-0.7=0.3。
 \subsection{Decision Boundary}
 

@@ -138,9 +138,73 @@ P(y=0|x;\theta)+P(y=1|x;\theta)=1
 \end{equation}
 例如，如果对于给定的 x，通过已经确定的参数计算得出$h_\theta(x)=0.7$,则表示有 70\%{}的几率 y 为正向类,相应地 y 为负向类的几率为 1-0.7=0.3。
 \subsection{Decision Boundary}
-
+\subparagraph{}
+决策边界（Decision Boundary）可以更好的帮助我们理解假设函数在计算什么
+\subparagraph{}
+首先回顾一下逻辑回归中假设函数的表达式：
+\begin{figure}[H]
+\center{\includegraphics[width=.8\textwidth]{309.png}}
+\caption{逻辑函数回顾}
+\label{fig:309}
+\end{figure}
+\subparagraph{}
+根据上面绘制的S形函数的图像，我们可以知道：
+\subparagraph{}
+当z=0时，g(z)=0.5;
+\subparagraph{}
+当z$>$0时，g(z)$>$0.5;
+\subparagraph{}
+当z$<$0时，g(z)$<$0.5;
+\subparagraph{}
+又因为
+\begin{equation}
+z=\theta^Tx
+\end{equation}
+\subparagraph{}
+所以：
+\subparagraph{}
+$\theta^Tx\geq0$时，预测y=1；
+\subparagraph{}
+$\theta^Tx<0$时，预测y=0；
+\subparagraph{}
+假设有一个模型：
+\begin{figure}[H]
+\center{\includegraphics[width=.8\textwidth]{310.png}}
+\caption{线性决策边界}
+\label{fig:310}
+\end{figure}
+\subparagraph{}
+绘制直线$x_1+x_2=3$,这条直线便是我们的模型的分界线，将预测y=1的区域和预测y=0的区分隔开，如图所示：
+\begin{figure}[H]
+\center{\includegraphics[width=.4\textwidth]{320.png}}
+\caption{线性决策边界图}
+\label{fig:320}
+\end{figure}
+\subparagraph{}
+另一种情况：
+\begin{figure}[H]
+\center{\includegraphics[width=.8\textwidth]{312.png}}
+\caption{非线性决策边界}
+\label{fig:312}
+\end{figure}
+\subparagraph{}
+需要二次方特征，得到的决策边界（判定边界）恰好是在原点且半径为1的圆形。
+\subparagraph{}
+我们可以用非常复杂的模型来适应非常复杂的判定边界。
+例如：
+\begin{equation}
+h_\theta(x)=g(\theta_0+\theta_1x_1+\theta_2x_2+\theta_3x_1^2+\theta_4x_1^2x_2+\theta_5x_1^2x_2^2+\theta_6x_1^3x_2+...)
+\end{equation}
+\subparagraph{}
+我们可能会得到比椭圆等更复杂的判定边界:
+\begin{figure}[H]
+\center{\includegraphics[width=.4\textwidth]{313.png}}
+\caption{更复杂的情况}
+\label{fig:313}
+\end{figure}
 \section{Logistic Regression Model}
 \subsection{Cost Function}
+
 \subsection{Simplified Cost Function and Gradient Descent}
 \subsection{Advanced Optimization} 
 

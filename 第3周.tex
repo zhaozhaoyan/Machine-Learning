@@ -204,12 +204,206 @@ h_\theta(x)=g(\theta_0+\theta_1x_1+\theta_2x_2+\theta_3x_1^2+\theta_4x_1^2x_2+\t
 \end{figure}
 \section{Logistic Regression Model}
 \subsection{Cost Function}
-
+\subparagraph{}
+介绍如何拟合逻辑回归模型的参数$\theta$，具体来说，我们要定义来拟合参数的优化目标或者叫代价函数，这便是监督学习问题中的逻辑回归模型的拟合问题。
+\begin{figure}[H]
+\center{\includegraphics[width=.8\textwidth]{321.png}}
+\caption{如何选择参数$\theta$}
+\label{fig:321}
+\end{figure}
+\begin{figure}[H]
+\center{\includegraphics[width=.8\textwidth]{322.png}}
+\caption{线性代价函数讨论}
+\label{fig:322}
+\end{figure}
+\subparagraph{}
+Cost Function:
+\begin{equation}
+J(\theta)=\frac{1}{m}\sum_{i+1}^m\frac{1}{2}{(h_\theta(x^{(i)})-y^{(i)})}^2
+\end{equation}
+\subparagraph{}
+对于线性回归模型，我们定义的代价函数是所有模型误差的平方和。理论上来说，我们也可以对逻辑回归模型沿用这个定义，但是问题在于，当我们将$h_\theta=\frac{1}{1+e^{-\theta^Tx}}$带入到这样定义的代价函数中去，我们得到的代价函数将是一个非凸函数（non-convex function）。
+\begin{figure}[H]
+\center{\includegraphics[width=.8\textwidth]{323.png}}
+\caption{非凸函数与凸函数}
+\label{fig:323}
+\end{figure}
+这就意味着我们的代价函数有许多局部最小值，这将影响梯度下降算法寻找全局最小值。
+\subparagraph{}
+线性回归代价函数:
+\begin{equation}
+J(\theta)=\frac{1}{m}\sum_{i+1}^m\frac{1}{2}{(h_\theta(x^{(i)})-y^{(i)})}^2
+\end{equation}
+\subparagraph{}
+重新定义逻辑回归的代价函数：（这种方式可以保证$J(\theta)$对于逻辑回归是凸函数）
+\begin{equation}
+J(\theta)=\frac{1}{m}\sum_{i=1}^mCost(h_\theta(x^{(i)}),y^{(i)})
+\end{equation}
+\subparagraph{}
+其中：
+\begin{equation}
+Cost(h_\theta(x),y)=\left\{\begin{array}{rcl}
+-log(h_\theta(x))  &    &{if y=1}\\
+-log(1-h_\theta(x)) &   & {if y=0}
+\end{array}\right.
+\end{equation}
+\subparagraph{}
+$h_\theta(x)$与$Cost(h_\theta(x),y)$之间的关系如下图所示：
+\begin{figure}[H]
+\center{\includegraphics[width=.8\textwidth]{324.png}}
+\caption{$h_\theta(x)$与$Cost(h_\theta(x),y)$的关系}
+\label{fig:324}
+\end{figure}
+这样构建的函数的特点是：
+\subparagraph{}
+（1）当实际的y=1且$h_\theta$也为1时的误差为0；
+\subparagraph{}
+（2）当y=1但不为1时误差随着的变小而变大；
+\subparagraph{}
+（3）当实际的y=0且$h_\theta$也为0时代价为0；
+\subparagraph{}
+（4）当y=0但$h_\theta$不为0时误差随着$h_\theta$的变大而变大；
 \subsection{Simplified Cost Function and Gradient Descent}
-\subsection{Advanced Optimization} 
-
+\begin{figure}[H]
+\center{\includegraphics[width=.8\textwidth]{326.png}}
+\caption{$h_\theta(x)$与$Cost(h_\theta(x),y)$的关系}
+\label{fig:326}
+\end{figure}
+将构建的构造函数简化如下：
+\begin{equation}
+Cost(h_\theta(x))=-ylog(h_\theta(x))-(1-y)log(1-log(h_\theta(x))
+\end{equation}
+带入到代价函数中得到：
+\begin{equation}
+J(\theta)=-\frac{1}{m}[\sum_{i=1}^my^{(i)}logh_\theta(x^{(i)})+(1-y^{(i)})log(1-h_\theta(x^{x(i)}))]
+\end{equation}
+\subparagraph{}
+A vectorized implementation is:
+\begin{equation}
+h=g(X\theta)
+\end{equation}
+\begin{equation}
+J(\theta)=-\frac{1}{m}\cdot(-y^Tlog(h)-(1-y)^Tlog(1-h))
+\end{equation}
+\begin{figure}[H]
+\center{\includegraphics[width=.8\textwidth]{327.png}}
+\caption{梯度下降算法的导出}
+\label{fig:327}
+\end{figure}
+在得到这样一个代价函数以后，我们便可以用梯度下降算法来求得能使代价函数最小的参数$\theta$，算法为：
+\subparagraph{}
+repeat\{{}
+\begin{equation}
+    \theta_j:=\theta_j-\alpha\frac{\partial}{\partial\theta_j}J(\theta)
+\end{equation}
+\begin{equation}
+(simultaneously update all)
+\end{equation}
+\subparagraph{}
+\}{}
+\subparagraph{}
+对$\theta_j$求导后得出：
+\subparagraph{}
+repeat\{{}
+\begin{equation}
+\theta_j:=\theta_j-\alpha\sum_{i=1}^m(h_\theta(x^{(i)})-y^{(i)})x_j^{(i)}
+\end{equation}
+\begin{equation}
+(simultaneously update all)
+\end{equation}
+\subparagraph{}
+\}{}
+\subparagraph{}
+A vectorized implementation is:
+\begin{equation}
+\theta_j:=\theta_j-\frac{\alpha}{m}X^T(g(X\theta)-\vec{y})
+\end{equation}
+\subparagraph{}
+在这个视频中，我们定义了单训练样本的代价函数，凸性分析的内容是超出我们这门课的范围的，但是可以证明我们所选的代价值函数会给我们一个凸优化问题。代价函数$J(\theta)$会是一个凸函数，并没有局部最优值。
+\subparagraph{}
+注意：
+\subparagraph{}
+线性回归假设函数：
+\begin{equation}
+h_\theta(x)=\theta^Tx
+\end{equation}
+\subparagraph{}
+逻辑回归假设函数：
+\begin{equation}
+h_\theta(x)=g(\theta^Tx)=\frac{1}{1+e^{-\theta^Tx}}
+\end{equation}
+\subparagraph{}
+虽然得到的梯度下降算法表面看上去与线性回归的梯度下降算法一样，但是这里的逻辑回归假设函数与线性回归$h_\theta=\theta^Tx$的不同，所以实际上是不一样的。另外，在运行梯度下降算法之前，进行特征缩放依旧是非常有必要的，特征缩放也适用与逻辑回归。
+\subparagraph{}
+逻辑回归是一种非常强大的，甚至是世界上使用最广泛的一种分类算法。
+\subsection{Advanced Optimization}
+\subparagraph{}
+利用高级优化算法，使通过梯度下降进行逻辑回归的速度大大提高，而且这也将使算法更加适合解决大型的机器学习问题，比如我们有数目庞大的特征量。
+\subparagraph{}
+换个角度来看什么是梯度下降，我们有一个代价函数$J(\theta)$，我们想要使其最小化，我们需要做的是编写代码，当输入参数$\theta$时，它们会计算出两种东西：$J(\theta)$以及J等于0、1直到n时的偏导数项。
+\begin{figure}[H]
+\center{\includegraphics[width=.8\textwidth]{328.png}}
+\caption{梯度下降执行过程}
+\label{fig:328}
+\end{figure}
+\subparagraph{}
+假设我们已经完成了可以实现这两件事的代码，那么梯度下降所做的就是反复执行这些更新。
+\subparagraph{}
+另一种考虑梯度下降的思路是：我们需要写出代码来计算$J(\theta)$和这些偏导数，然后把这些插入到梯度下降中，然后它就可以为我们最小化这个函数。
+\subparagraph{}
+对于梯度下降，不需要编写代码去计算代价函$J(\theta)$，只需要计算导数项，但是如果你希望代码还要能够监控这些$J(\theta)$的收敛性，那就需要我们自己去编写代码来计算代价函数$J(\theta)$和偏导数项$\frac{\partial}{\partial\theta_j}J(\theta)$，所以在写完能够计算这两者的代码之后，我们就可以使用梯度下降。
+\subparagraph{}
+共轭梯度法，BFGS（变尺度法）和L-BFGS（限制变尺度法）就是其中一些更高级的优化算法，她们需要有一种方法来最小化代价函数$J(\theta)$。
+\subparagraph{}
+三种方法的优缺点：
+\begin{figure}[H]
+\center{\includegraphics[width=.8\textwidth]{329.png}}
+\caption{高级优化算法优缺点}
+\label{fig:329}
+\end{figure}
+\subparagraph{}
+实际上,我不会建议你们编写自己的代码来计算数据的平方根,或者计算逆矩阵,因为对于这些算法,我还是会建议你直接使用一个软件库,比如说,要求一个平方根,我们所能做的就是调用一些别人已经写好用来计算数字平方根的函数。幸运的是现在我们有 Octave 和与它密切相关的 MATLAB 语言可以使用。
+\subparagraph{}
+Octave 有一个非常理想的库用于实现这些先进的优化算法,所以,如果你直接调用它
+自带的库,你就能得到不错的结果。我必须指出这些算法实现得好或不好是有区别的,因此,
+如果你正在你的机器学习程序中使用一种不同的语言,比如如果你正在使用 C、C + + 、Java
+等等,你可能会想尝试一些不同的库,以确保你找到一个能很好实现这些算法的库。因为在
+L-BFGS 或者等高线梯度的实现上,表现得好与不太好是有差别的,因此现在让我们来说明:
+\subparagraph{}
+如何使用这些算法：
+\begin{figure}[H]
+\center{\includegraphics[width=.4\textwidth]{330.png}}
+\caption{举例}
+\label{fig:330}
+\end{figure}
+\subparagraph{}
+运行一个像这样的Octave函数：
+\begin{figure}[H]
+\center{\includegraphics[width=.4\textwidth]{331.png}}
+\caption{Octave函数}
+\label{fig:331}
+\end{figure}
+\subparagraph{}
+这样就计算出这个代价函数,函数返回的第二个值是梯度值,梯度值应该是一个 2×1的向量,梯度向量的两个元素对应这里的两个偏导数项,运行这个 costFunction 函数后,你
+就可以调用高级的优化函数,这个函数叫 fminunc,它表示 Octave 里无约束最小化函数。调用它的方式如下:
+\begin{figure}[H]
+\center{\includegraphics[width=.6\textwidth]{332.png}}
+\caption{调用高级优化函数}
+\label{fig:332}
+\end{figure}
+\subparagraph{}
+你要设置几个options,这个 options 变量作为一个数据结构可以存储你想要的 options,所以 GradObj 和 On,这里设置梯度目标参数为打开(on),这意味着你现在确实要给这个算法提供一个梯度,然后设置最大迭代次数,比方说 100,我们给出一个$\theta$的猜测初始值,它是一个 2×1 的向量,那么这个命令就调用 fminunc,这个@符号表示指向我们刚刚定义的costFunction 函数的指针。如果你调用它,它就会使用众多高级优化算法中的一个,当然你也可以把它当成梯度下降,只不过它能自动选择学习速率 α,你不需要自己来做。然后它会尝试使用这些高级的优化算法,就像加强版的梯度下降法,为你找到最佳的$\theta$值。
+\subparagraph{}
+总结：需要学到的主要内容是：写一个函数，它能返回代价函数值，梯度值，因此要把这个应用到逻辑回归中，甚至线性回归中，你可以把这些优化算法用于线性回归，你需要做的就是输入合适的代码来计算这里的这些东西。
 \section{Multiclass Classification}
 \subsection{Multiclass Classification:One-vs-all}
+\subparagraph{}
+
 \subparagraph*{}
+\section{Solving the Problem of Overfitting}
+\subsection{The Problem of Overfitting}
+\subsection{Cost Function}
+\subsection{Regularized Linear Regression}
+\subsection{Regularized Logistic Regression}
 \end{CJK}
 \end{document}

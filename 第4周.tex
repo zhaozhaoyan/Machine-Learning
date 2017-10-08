@@ -27,15 +27,42 @@
 \section{Motivations}
 \subsection{Non-linear Hypotheses}
 \subparagraph{}
+我们之前学过的线性回归和逻辑回归都有一个缺点：当特征量太多时，计算的负荷会非常大。
+\subparagraph{}
+例如：
+\begin{figure}[H]
+\center{\includegraphics[width=.8\textwidth]{402.png}}
+\caption{举例说明}
+\label{fig:402}
+\end{figure}
+\subparagraph{}
+当我们使用$x_1$和$x_2$的多项式进行预测时，我们可以应用的很好。
+\subparagraph{}
+之前我们已经看到过,使用非线性的多项式项,能够帮助我们建立更好的分类模型。假设我们有非常多的特征,例如大于 100 个变量,我们希望用这 100 个特征来构建一个非线性
+的多项式模型,结果将是数量非常惊人的特征组合,即便我们只采用两两特征的组合($x_1x_2+x_1x_3+x_1x_4+...+x_2x_3+x_2x_4+...+x_99x_100$) ,我们也会有接近 5000个组合而成的特征。这对于一般的逻辑回归来说需要计算的特征太多了。
+\subparagraph{}
+假设我们希望训练一个模型来识别视觉对象（例如识别一张图片上是否是一辆汽车），我么怎样才能这么做呢？一种方法是我们利用很多汽车的图片和很多非汽车的图片，然后利用这些图片上的一个个像素的值（饱和度或亮度）来作为特征。
+\subparagraph{}
+假如我们只使用灰度图片，每个像素则只有一个值（而非
+RGB值），我们可以选取图片上的两个不同位置的两个像素，然后训练一个逻辑回归算法，利用这两个像素的值来判断图片上是否是汽车：
+\begin{figure}[H]
+\center{\includegraphics[width=.8\textwidth]{403.png}}
+\caption{计算机视觉-汽车模型}
+\label{fig:403}
+\end{figure}
+\subparagraph{}
+假使我们采用的都是50x50像素的小图片,并且我们将所有的像素视为特征,则会有2500个特征,如果我们要进一步将两两特征组合构成一个多项式模型,则会有约$\frac{2500^2}{2}$ 个（接近3百万个）特征。普通的逻辑回归模型,不能有效地处理这么多的特征,这时候我们需要神经网络。
 \subsection{Neurons and the Brain}
 \subparagraph{}
+神经网络是一种很古老的算法，它最初产生的目的是制造能模拟大脑的机器。它是计算量有些偏大的算法，然而大概由于近些年计算机的运行速度变快，才足以运行起大规模的神经网络。当想模拟大脑时，是指想制造出与人类大脑作用效果相同的机器。大脑可以学会去以看而不是听的方式处理图像，学会处理我们的触觉。
 \section{Neural Networks}
 \subsection{Model Representation I}
+\subparagraph{}
 \subsection{Model Representation II}
 \section{Applications}
 \subsection{Examples and Intuitions I}
 \subsection{Examples and Intuitions II}
 \subsection{Multiclass Classification}
-在接下来的课程中，我们将会学习一个非常强大的非线性分类器，无论是线性回归问题，还是逻辑回归问题，都可以构造多项式来解决。你将会逐渐发现还有更强大的非线性分类器，可以用来解决多项式回归问题，我们接下来将学会比现在解决问题的方法强大N倍的学习算法。
+
 \end{CJK}
 \end{document}

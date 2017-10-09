@@ -10,7 +10,7 @@
 \usepackage{amssymb}
 \usepackage{float}
 %可能用到的包
-\title{Machine Learning - Week 3}
+\title{Machine Learning - Week 4}
 \author{赵燕}
 \date{}
 \begin{document} 
@@ -150,10 +150,243 @@ The +1 comes from the addition in $\theta^{(j)}$ of the "bias nodes," $x_0$ and 
 \subparagraph{}
 Example:if layer 1 has 2 input nodes and layer 2 has 4 activation nodes.Dimension of $\theta^{(1)}$ is going to be 4*3 where $s_j=2$ and $s_{j+1}=4$,so $s_{j+1}*(s_j+1)=4*3$.
 \subsection{Model Representation II}
+\subparagraph{}
+前向传播算法（Forward Propagation）：每一个a都是由上一层所有的x和每一个x所对应的决定的。我们把这样从左到右的算法称为前向传播法。
+\subparagraph{}
+前向传播算法相对于使用循环来编码，利用向量化的方法会使得计算更为简便。以上面的神经网络为例，试着计算第二层的值。
+\begin{figure}[H]
+\center{\includegraphics[width=.8\textwidth]{409.png}}
+\caption{神经网络模型}
+\label{fig:409}
+\end{figure}
+\subparagraph{}
+对于上图所示的模型，激活单元和输出分别表达为：
+\begin{equation}
+a_1^{(2)}=g(\theta_{10}^{(1)}x_0+\theta_{11}^{(1)}x_1+\theta_{12}^{(1)}x_2+\theta_{13}^{(1)}x_3)
+\end{equation}
+\begin{equation}
+a_2^{(2)}=g(\theta_{20}^{(1)}x_0+\theta_{21}^{(1)}x_1+\theta_{22}^{(1)}x_2+\theta_{23}^{(1)}x_3)
+\end{equation}
+\begin{equation}
+a_3^{(2)}=g(\theta_{30}^{(1)}x_0+\theta_{31}^{(1)}x_1+\theta_{32}^{(1)}x_2+\theta_{33}^{(1)}x_3)
+\end{equation}
+\begin{equation}
+h_\theta(x)=g(\theta_{10}^{(2)}a_0^{(2)}+\theta_{11}^{(2)}a_1^{(2)}+\theta_{12}^{(2)}a_2^{(2)}+\theta_{13}^{(2)}a_3^{(2)})
+\end{equation}
+\begin{figure}[H]
+\center{\includegraphics[width=.8\textwidth]{415.png}}
+\caption{神经网络模型}
+\label{fig:415}
+\end{figure}
+\subparagraph{}
+In this section we'll do a vectorized implementation of the above functions.We're going to define a new variable $z_k^{(k)}$ that encompasses the parameters inside our g function.In our previous example if we replaced by the variable z for all the parameters we should get:
+\begin{equation}
+a_1^{(2)}=g(z_1^{(2)})
+\end{equation}
+\begin{equation}
+a_2^{(2)}=g(z_2^{(2)})
+\end{equation}
+\begin{equation}
+a_3^{(2)}=g(z_3^{(2)})
+\end{equation}
+\subparagraph{}
+In other words,for layers j=2 and node k,the variable z will be:
+\begin{equation}
+z_k^{(2)}=\Theta_{k,0}^{(1)}x_0+\Theta_{k,1}^{(1)}x_1+...+\Theta_{k,n}^{(1)}x_n
+\end{equation}
+\subparagraph{}
+The vector representation of x and $z^j$ is:
+\begin{equation}
+x=\left[\begin{matrix}
+x_0\\x_1\\x_2\\.\\.\\x_n
+\end{matrix}\right]
+\end{equation}
+\begin{equation}
+z^{(j)}=\left[\begin{matrix}
+z_1^{(j)}\\z_2^{(j)}\\.\\.\\z_n^{(j)}
+\end{matrix}\right]
+\end{equation}
+\subparagraph{}
+Setting $x=a^{(1)}$,we can rewrite the equation as:
+\begin{equation}
+z^{(j)}=\Theta^{(j-1)}a^{(j-1)}
+\end{equation}
+\subparagraph{}
+We are multiplying our matrix $\Theta^{(j-1)}$ with dimensions $s_j\times(n+1)$ (where sj is the number of our activation nodes) by our vector $a^{(j-1)}$ with height (n+1). This gives us our vector $z^{(j)}$ with height $s_j$. Now we can get a vector of our activation nodes for layer j as follows:
+\begin{equation}
+a^{(j)}=g(z^{(j)})
+\end{equation}
+\subparagraph{}
+Where our function g can be applied element-wise to our vector $z^{(j)}$.
+\subparagraph{}
+We can then add a bias unit (equal to 1) to layer j after we have computed $a^{(j)}$. This will be element $a_0^{(j)}$ and will be equal to 1. To compute our final hypothesis, let's first compute another z vector:
+\begin{equation}
+z^{(j+1)}=\Theta^{(j)}a^{(j)}
+\end{equation}
+\subparagraph{}
+We get this final z vector by multiplying the next theta matrix after $\Theta^{(j-1)}$ with the values of all the activation nodes we just got. This last theta matrix $\Theta^{(j)}$ will have only one row which is multiplied by one column $a^{(j)}$ so that our result is a single number. We then get our final result with:
+\begin{equation}
+h_\Theta(x)=a^{(j+1)}=g(z^{(j+1)})
+\end{equation}
+\subparagraph{}
+Notice that in this last step, between layer j and layer j+1, we are doing exactly the same thing as we did in logistic regression. Adding all these intermediate layers in neural networks allows us to more elegantly produce interesting and more complex non-linear hypotheses.
+\begin{figure}[H]
+\center{\includegraphics[width=.8\textwidth]{416.png}}
+\caption{神经网络模型}
+\label{fig:416}
+\end{figure}
+\begin{figure}[H]
+\center{\includegraphics[width=.8\textwidth]{417.png}}
+\caption{神经网络模型}
+\label{fig:417}
+\end{figure}
+\begin{figure}[H]
+\center{\includegraphics[width=.7\textwidth]{418.png}}
+\caption{神经网络的架构}
+\label{fig:418}
+\end{figure}
+\subparagraph{}
+其实神经网络就像是逻辑回归，只不过输入特征值不再是$x_1$，$x_2$，$x_3$，我们把逻辑回归中的输入向量$x_1$，$x_2$，$x_3$变成了中间层的$a_1$，$a_2$，$a_3$，即：
+\begin{equation}
+h_\theta(x)=g(\theta_{10}^{(2)}a_0^{(2)}+\theta_{11}^{(2)}a_1^{(2)}+\theta_{12}^{(2)}a_2^{(2)}+\theta_{13}^{(2)}a_3^{(2)})
+\end{equation}
+\subparagraph{}
+我们可以把$a_0$，$a_1$，$a_2$，$a_3$看成更加高级的特征值，也就是$x_0$，$x_1$，$x_2$，$x_3$的进化体，并且它们是由x决定的，因为是梯度下降的，所以a是变化的，并且变得越来越厉害，所以这些更高级的特征值远比仅仅将x次方厉害，也能更好的预测新数据。
+\subparagraph{}
+这就是神经网络相比于逻辑回归和线性回归的优势。
 \section{Applications}
 \subsection{Examples and Intuitions I}
+\subparagraph{}
+从本质上讲，神经网络能够通过学习得出其自身的一系列特征。在普通的逻辑回归中,我们被限制为使用数据中的原始特征 $x_1$，$x_2$，$x_3$，...，$x_n$，虽然可以使用一些二项式项来组合这些特征,但是仍然受到这些原始特征的限制。在神经网络中,原始特征只是输入层，在上面三层的神经网络例子中,第三层也就是输出层做出的预测利用的是第二层的特征，而非输入层中的原始特征，我们可以认为第二层中的特征是神经网络通过学习后自己得出的一系列用于预测输出变量的新特征。
+\subparagraph{}
+神经网络中，单层神经元（无中间层）的计算可用来表示逻辑运算，比如逻辑与AND、逻辑或OR。
+\subparagraph{}
+举例说明：逻辑与AND
+\subparagraph{}
+A simple example of applying neural networks is by predicting $x_1$ AND $x_2$, which is the logical 'and' operator and is only true if both $x_1$ and $x_2$ are 1.
+\subparagraph{}
+The graph of our functions will look like:
+\begin{figure}[H]
+\center{\includegraphics[width=.3\textwidth]{419.png}}
+\label{fig:419}
+\end{figure}
+\subparagraph{}
+Remember that $x_0$ is our variable and is always 1.
+\subparagraph{}
+Let's set our first theta matrix as:
+\begin{equation}
+\Theta^{(1)}=\left[\begin{matrix}
+-30&20&20
+\end{matrix}\right]
+\end{equation}
+\subparagraph{}
+This will cause the output of our hypothesis to only be positive if both $x_1$ and $x_2$ are 1. In other words:
+\begin{figure}[H]
+\center{\includegraphics[width=.4\textwidth]{420.png}}
+\label{fig:420}
+\end{figure}
+\begin{figure}[H]
+\center{\includegraphics[width=.8\textwidth]{421.png}}
+\caption{逻辑与AND}
+\label{fig:421}
+\end{figure}
+\subparagraph{}
+So we have constructed one of the fundamental operations in computers by using a small neural network rather than using an actual AND gate. Neural networks can also be used to simulate all the other logical gates. The following is an example of the logical operator 'OR', meaning either $x_1$ is true or $x_2$ is true, or both:
+\begin{figure}[H]
+\center{\includegraphics[width=.7\textwidth]{422.png}}
+\caption{逻辑或OR}
+\label{fig:422}
+\end{figure}
 \subsection{Examples and Intuitions II}
+\subparagraph{}
+逻辑非运算（NOT）：
+\begin{figure}[H]
+\center{\includegraphics[width=.7\textwidth]{424.png}}
+\caption{逻辑非NOT}
+\label{fig:424}
+\end{figure}
+\subparagraph{}
+二元逻辑运算符（Binary logical operators）当输入特征为布尔值（0或1）时，我们可以用一个单一的激活层作为二元逻辑运算符，为了表示不同的运算符，我们来选择不同的权重即可。
+\subparagraph{}
+The $\Theta^{(1)}$ matrices for AND,NOR,and OR are:
+\begin{figure}[H]
+\center{\includegraphics[width=.3\textwidth]{425.png}}
+\label{fig:425}
+\end{figure}
+\subparagraph{}
+We can combine these to get the XNOR logical operator (which gives 1 if $x_1$ and $x_2$ are both 0 or both 1).
+\begin{figure}[H]
+\center{\includegraphics[width=.4\textwidth]{426.png}}
+\label{fig:426}
+\end{figure}
+\subparagraph{}
+For the transition between the first and second layer, we'll use a $\Theta^{(1)}$ matrix that combines the values for AND and NOR:
+\begin{figure}[H]
+\center{\includegraphics[width=.3\textwidth]{427.png}}
+\label{fig:427}
+\end{figure}
+\subparagraph{}
+For the transition between the second and third layer, we'll use a $\Theta^{(2)}$ matrix that uses the value for OR:
+\begin{figure}[H]
+\center{\includegraphics[width=.2\textwidth]{428.png}}
+\label{fig:428}
+\end{figure}
+\subparagraph{}
+Let's write out the values for all nodes:
+\begin{equation}
+a^{(2)}=g(\Theta^{(1)}\cdot{x})
+\end{equation}
+\begin{equation}
+a^{(3)}=g(\Theta^{(2)}\cdot{a^{(2)}})
+\end{equation}
+\begin{equation}
+h_\Theta(x)=a^{(3)}
+\end{equation}
+\subparagraph{}
+And there we have the XNOR operator using a hidden layer with two nodes! The following summarizes the above algorithm:
+\subparagraph{}
+我们可以利用神经元来组合成更为复杂的神经网络以实现更复杂的运算。例如我们要实现 XNOR(同或门运算（异或非门运算）) 功能(输入的两个值必须一样,均为 1 或均为 0),即 XNOR=($x_1$ AND $x_2$ )OR((NOT $x_1$ )AND(NOT $x_2$ ))
+\begin{figure}[H]
+\center{\includegraphics[width=.7\textwidth]{430.png}}
+\caption{同或门（异或非门）运算}
+\label{fig:430}
+\end{figure}
 \subsection{Multiclass Classification}
-
+\begin{figure}[H]
+\center{\includegraphics[width=.7\textwidth]{433.png}}
+\caption{多分类问题举例}
+\label{fig:433}
+\end{figure}
+\begin{figure}[H]
+\center{\includegraphics[width=.7\textwidth]{434.png}}
+\caption{多分类：One-vs-all}
+\label{fig:434}
+\end{figure}
+\subparagraph{}
+We can define our set of resulting classes as y:
+\begin{figure}[H]
+\center{\includegraphics[width=.3\textwidth]{445.png}}
+\label{fig:445}
+\end{figure}
+\subparagraph{}
+Each $y^{(i)}$ represents a different image corresponding to either a car, pedestrian, truck, or motorcycle. The inner layers, each provide us with some new information which leads to our final hypothesis function. The setup looks like:
+\begin{figure}[H]
+\center{\includegraphics[width=.4\textwidth]{446.png}}
+\label{fig:446}
+\end{figure}
+\subparagraph{}
+Our resulting hypothesis for one set of inputs may look like:
+\begin{equation}
+h_\Theta(x)=\left[\begin{matrix}
+0\\0\\1\\0
+\end{matrix}\right]
+\end{equation}
+\subparagraph{}
+In which case our resulting class is the third one down, or $h_\Theta{(x)}_3$, which represents the motorcycle.
+\begin{figure}[H]
+\center{\includegraphics[width=.8\textwidth]{440.png}}
+\caption{多分类习题：One-vs-all}
+\label{fig:440}
+\end{figure}
 \end{CJK}
 \end{document}

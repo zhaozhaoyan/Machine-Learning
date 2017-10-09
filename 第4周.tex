@@ -58,6 +58,97 @@ RGB值），我们可以选取图片上的两个不同位置的两个像素，�
 \section{Neural Networks}
 \subsection{Model Representation I}
 \subparagraph{}
+为了构建神经网络模型，我们首先需要思考大脑中的神经网络是怎样的？每一个神经元都可以被认为是一个处理单元/神经核（processing unit/Nucleus），它含有许多输入神经/树突（input/Dendrite），并且有一个输出神经/轴突（output/Axon）。神经网络是大量神经元相互连接并通过电脉冲来交流的一个网络。
+\begin{figure}[H]
+\center{\includegraphics[width=.6\textwidth]{405.png}}
+\caption{大脑中的神经网络}
+\label{fig:405}
+\end{figure}
+\subparagraph{}
+神经网络模型建立在很多神经元之上，每一个神经元又是一个个学习模型。这些神经元（也叫激活单元,antivation unit）采纳一些特征作为输出，并且根据本身的模型提供一个输出。下图是一个以逻辑回归模型作为自身学习模型的神经元示例，在神经网络中，参数又可以被称为权重（weight）。
+\subparagraph{}
+ In this situation, our "theta" parameters are sometimes called "weights".
+\subparagraph{}
+Visually, a simplistic representation looks like:
+\begin{figure}[H]
+\center{\includegraphics[width=.3\textwidth]{406.png}}
+\label{fig:406}
+\end{figure}
+\begin{figure}[H]
+\center{\includegraphics[width=.6\textwidth]{407.png}}
+\caption{神经网络简单模型}
+\label{fig:407}
+\end{figure}
+\subparagraph{}
+Our input nodes (layer 1), also known as the "input layer", go into another node (layer 2), which finally outputs the hypothesis function, known as the "output layer".
+\subparagraph{}
+We can have intermediate layers of nodes between the input and output layers called the "hidden layers."
+\subparagraph{}
+In this example, we label these intermediate or "hidden" layer nodes a02⋯an2 and call them "activation units."
+\subparagraph{}
+$a_i^{(j)}$="activation" of unit i in layer j
+\subparagraph{}
+$\theta^{(j)}$=matrix of weight controlling function mapping from layer j to layer j+1.
+\subparagraph{}
+If we have one hidden layer.it would look like:
+\begin{figure}[H]
+\center{\includegraphics[width=.3\textwidth]{408.png}}
+\label{fig:408}
+\end{figure}
+\begin{figure}[H]
+\center{\includegraphics[width=.7\textwidth]{409.png}}
+\caption{神经网络模型}
+\label{fig:409}
+\end{figure}
+\subparagraph{}
+（1）输入单元$x_1$，$x_2$，$x_3$：将原始数据输入给它们
+\subparagraph{}
+（2）中间单元$a_1$，$a_2$，$a_3$：负责将数据处理，然后呈递到下一层。
+\subparagraph{}
+（3）输出单元：负责计算$h_\theta(x)$
+\subparagraph{}
+神经网络模型是许多逻辑单元按照不同层级组织起来的网络,每一层的输出变量都是下一层的输入变量。下图为一个 3 层的神经网络,第一层成为输入层(Input Layer),最后一
+层称为输出层(Output Layer),中间一层成为隐藏层(Hidden Layers)。我们为每一层都增加一个偏差单位(bias unit):
+\begin{figure}[H]
+\center{\includegraphics[width=.7\textwidth]{410.png}}
+\caption{神经网络模型}
+\label{fig:410}
+\end{figure}
+\subparagraph{}
+描述模型：
+\subparagraph{}
+$a_i^{(j)}$代表第j层的第i个激活单元。$\theta^{(j)}$代表从第j层映射到第j+1层时的权重的矩阵，例如$\theta^{(1)}$代表从第一层映射到第二层的权重的矩阵。其尺寸是：以第j+1层的激活单元数量为行数，以第j层的激活单元数加一为列数的矩阵。例如：上图所示的神经网络的$\theta^{(1)}$的尺寸为：3*4。
+\subparagraph{}
+对于上图所示的模型，激活单元和输出分别表达为：
+\begin{equation}
+a_1^{(2)}=g(\theta_{10}^{(1)}x_0+\theta_{11}^{(1)}x_1+\theta_{12}^{(1)}x_2+\theta_{13}^{(1)}x_3)
+\end{equation}
+\begin{equation}
+a_2^{(2)}=g(\theta_{20}^{(1)}x_0+\theta_{21}^{(1)}x_1+\theta_{22}^{(1)}x_2+\theta_{23}^{(1)}x_3)
+\end{equation}
+\begin{equation}
+a_3^{(2)}=g(\theta_{30}^{(1)}x_0+\theta_{31}^{(1)}x_1+\theta_{32}^{(1)}x_2+\theta_{33}^{(1)}x_3)
+\end{equation}
+\begin{equation}
+h_\theta(x)=g(\theta_{10}^{(2)}a_0^{(2)}+\theta_{11}^{(2)}a_1^{(2)}+\theta_{12}^{(2)}a_2^{(2)}+\theta_{13}^{(2)}a_3^{(2)})
+\end{equation}
+\subparagraph{}
+This is saying that we compute our activation nodes by using a 3×4 matrix of parameters. We apply each row of the parameters to our inputs to obtain the value for one activation node. Our hypothesis output is the logistic function applied to the sum of the values of our activation nodes, which have been multiplied by yet another parameter matrix $\theta^{(2)}$ containing the weights for our second layer of nodes.
+\subparagraph{}
+Each layer gets its own matrix of weight,$\theta^{(j)}$.
+\subparagraph{}
+The dimensions of these matrixes of weights is determined as follows:
+\subparagraph{}
+If network has $s_j$ units in layer and $s_{j+1}$ units in layer j+1,then $\theta^{(j)}$ will be of dimension $s_{j+1}*(s_j+1)$.
+\subparagraph{}
+The +1 comes from the addition in $\theta^{(j)}$ of the "bias nodes," $x_0$ and $\theta^{(j)}$.In other words the output nodes will not include the bias nodes while the inputs will.The following image summarizes our model representation:
+\begin{figure}[H]
+\center{\includegraphics[width=.8\textwidth]{412.png}}
+\caption{神经网络模型}
+\label{fig:412}
+\end{figure}
+\subparagraph{}
+Example:if layer 1 has 2 input nodes and layer 2 has 4 activation nodes.Dimension of $\theta^{(1)}$ is going to be 4*3 where $s_j=2$ and $s_{j+1}=4$,so $s_{j+1}*(s_j+1)=4*3$.
 \subsection{Model Representation II}
 \section{Applications}
 \subsection{Examples and Intuitions I}

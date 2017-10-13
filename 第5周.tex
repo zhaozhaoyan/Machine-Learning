@@ -117,6 +117,60 @@ a^{(4)} & =h_\Theta(x)=g(z^{(4)})
 \end{figure}
 计算偏导数项利用反向传播算法：Backpropagation Algorithm
 \subparagraph{}
+"Backpropagation" is neural-network terminology for minimizing our cost function, just like what we were doing with gradient descent in logistic and linear regression. Our goal is to compute:
+\begin{equation}
+min_{\Theta}J(\Theta)
+\end{equation}
+\subparagraph{}
+That is, we want to minimize our cost function J using an optimal set of parameters in theta. In this section we'll look at the equations we use to compute the partial derivative of $J(\Theta)$:
+\begin{equation}
+\frac{\partial}{\partial\Theta_{i,j}^{(l)}}J(\Theta)
+\end{equation}
+\subparagraph{}
+To do so, we use the following algorithm:
+\begin{figure}[H]
+\center{\includegraphics[width=.8\textwidth]{507.png}}
+\caption{后向传播算法}
+\label{fig:507}
+\end{figure}
+Given training set {($x^{(1)}$,$y^{(1)}$),($x^{(2)}$,$y^{(2)}$),...,($x^{(m)}$,$y^{(m)}$)}
+\subparagraph{}
+Set $\Delta_{i,j}^{(l)}:=0$for all (l,i,j), (hence you end up having a matrix full of zeros)
+\subparagraph{}
+For training example t =1 to m:
+\subparagraph{}
+（1）Set $a^{(1)}:=x^{(t)}$
+\subparagraph{}
+（2）Perform forward propagation to compute $a^{(l)}$ for l=2,3,...,L
+\begin{figure}[H]
+\center{\includegraphics[width=.6\textwidth]{509.png}}
+\caption{前向传播算法}
+\label{fig:509}
+\end{figure}
+\subparagraph{}
+（3）Using $y^{(t)}$, compute $\delta^{(L)}=a^{(L)}-y^{(t)}$
+\subparagraph{}
+Where L is our total number of layers and $a^{L}$ is the vector of outputs of the activation units for the last layer. So our "error values" for the last layer are simply the differences of our actual results in the last layer and the correct outputs in y. To get the delta values of the layers before the last layer, we can use an equation that steps us back from right to left:
+\subparagraph{}
+（4）Compute $\delta^{(L-1)}$,$\delta^{(L-2)}$,...,$\delta^{(2)}$ using $\delta^{(l)}=((\Theta^{(l)})^T\delta^{(l+1)}).* a^{(l)}.*(1-a^{(l)})$
+\subparagraph{}
+The delta values of layer l are calculated by multiplying the delta values in the next layer with the theta matrix of layer l. We then element-wise multiply that with a function called g', or g-prime, which is the derivative of the activation function g evaluated with the input values given by $z^{(l)}$.
+\subparagraph{}
+The g-prime derivative terms can also be written out as:
+\begin{equation}
+g'(z^{(l)})=a^{(l)}.*(1-a^{(l)})
+\end{equation}
+\subparagraph{}
+（5）$\Delta_{i,j}^{(l)}:=\Delta_{i,j}^{(l)}+a_j^{(l)}\delta_i^{(l+1)}$ or with vetorization,$\Delta^{(l)}:=\Delta^{(l)}+\delta^{(l+1)}(a^{(l)})^T$
+\subparagraph{}
+Hence we update our new Δ matrix.
+\begin{align}
+D_{ij}^{(l)} & =\frac{1}{m}\Delta_{ij}^{(l)}+\lambda\Theta_{ij}^{(l)}\quad{if\quad{j\neq0}}\\
+D_{ij}^{(l)} & =\frac{1}{m}\Delta_{ij}^{(l)}\qquad{if\quad{j=0}}
+\end{align}
+\subparagraph{}
+The capital-delta matrix D is used as an "accumulator" to add up our values as we go along and eventually compute our partial derivative. Thus we get $\frac{\partial}{\partial\Theta_{ij}^{(l)}}J(\Theta)=D_{ij}^{(l)}$
+\subparagraph{}
 Intuition:$\delta_j^{(i)}$="error" of node j in layer l.
 \subparagraph{}
 $a_j^{(i)}$:第l层第j个单元（节点）的激励值。
@@ -179,9 +233,21 @@ i=下一层中误差单元的下标，是受到权重矩阵中第i行影响的�
 即首先用正向传播方法计算出每一层的激活单元，利用训练集的结果与神经网络预测的结果求出最后一层的误差，然后利用该误差运用反向传播算法计算出直至第二层的所有误差。
 \subparagraph{}
 在求出了$\Delta_{ij}^{(l)}$之后，我们便可以计算低价函数的偏导数了，计算方法如下：
-\begin{equation}
-D_{ij}^{(l)}=\frac{1}{m}\Delta_{ij}^{(l)}+\lambda\Theta_{ij}^{(l)}  if\quad{j\neq0}
-\end{equation}
+\begin{align}
+D_{ij}^{(l)} & =\frac{1}{m}\Delta_{ij}^{(l)}+\lambda\Theta_{ij}^{(l)}\quad{if\quad{j\neq0}}\\
+D_{ij}^{(l)} & =\frac{1}{m}\Delta_{ij}^{(l)}\qquad{if\quad{j=0}}
+\end{align}
+\subparagraph{}
+在Octave中，如果我们要使用fminuc这样的优化算法来求解出权重矩阵，我们需要将矩阵首先展开成向量，再利用算法求出最优解后再重新转换回矩阵。
+\subparagraph{}
+假设我们有三个权重矩阵，Theta1，Theat2，Theat3，尺寸分别为和，下面的代码可以实现这样的转换：
+\begin{minted}{octave}
+thetaVec=[Theta1(:);Theta2(:);Theta3(:)]
+...optimization using functions like fminuc...
+Theta1=reshape(thetaVec(1:110,10,11));
+Theta2=reshape(thetaVec(111:220,10,11));
+Theta1=reshape(thetaVec(221:231,1,11));
+\end{minted}
 \subsection{Backpropagation Intuition}
 \subparagraph{}
 \section{Backpropagation in Practice}

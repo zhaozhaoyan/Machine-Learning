@@ -250,19 +250,170 @@ Theta1=reshape(thetaVec(221:231,1,11));
 \end{minted}
 \subsection{Backpropagation Intuition}
 \subparagraph{}
+回顾之前所学的前向传播算法：
+\begin{figure}[H]
+\center{\includegraphics[width=.6\textwidth]{520.png}}
+\caption{回顾前向传播算法}
+\label{fig:520}
+\end{figure}
+\subparagraph{}
+Recall that the cost function for a neural network is:
+\begin{equation}
+J(\Theta)=-\frac{1}{m}\sum_{i=1}^m\sum_{k=1}^K[y_k^{(i)}log((h_\Theta(x^{(i)}))_k)+(1-y_k^{(i)})log(1-(h_\Theta(x^{(i)}))_k)]+\frac{\lambda}{2m}\sum_{l=1}^{L-1}\sum_{i=1}^{s_l}\sum_{j=1}^{s_l+1}(\Theta_{j,i}^{(l)})^2
+\end{equation}
+\subparagraph{}
+If we consider simple non-multiclass classification (k = 1) and disregard regularization, the cost is computed with:
+\begin{equation}
+cost(t)=y^{(t)}log(h_\Theta(x^{(ty)}))+(1-y^{(t)})log(1-h_\Theta(x^{(t)}))
+\end{equation}
+\subparagraph{}
+Intuitively, δj(l) is the "error" for aj(l) (unit j in layer l). More formally, the delta values are actually the derivative of the cost function:
+\begin{equation}
+\delta_j^{(l)}=\frac{\partial}{\partial{z_j^{(l)}}}cost(t)
+\end{equation}
+\subparagraph{}
+Recall that our derivative is the slope of a line tangent to the cost function, so the steeper the slope the more incorrect we are. Let us consider the following neural network below and see how we could calculate some $\delta_j^{(l)}$:
+\subparagraph{}
+后向传播算法做的是：
+\begin{figure}[H]
+\center{\includegraphics[width=.6\textwidth]{521.png}}
+\caption{后向传播算法做什么}
+\label{fig:521}
+\end{figure}
+\subparagraph{}
+后向传播算法：
+\begin{figure}[H]
+\center{\includegraphics[width=.8\textwidth]{523.png}}
+\caption{后向传播算法}
+\label{fig:523}
+\end{figure}
+\subparagraph{}
+In the image above, to calculate $\delta_2^{(2)}$, we multiply the weights $\Theta_{12}^{(2)}$ and $\Theta_{22}^{(2)}$ by their respective $\delta$ values found to the right of each edge. So we get $\delta_2^{(2)}=\Theta_{12}^{(2)}*\delta_1^{(3)}+\Theta_{22}^{(2)}*\delta_2^{(3)}$. To calculate every single possible $\delta_j^{(l)}$, we could start from the right of our diagram. We can think of our edges as our $\Theta_{ij}$. Going from right to left, to calculate the value of $\delta_j^{(l)}$, you can just take the over all sum of each weight times the δ it is coming from. Hence, another example would be $\delta_2^{(3)}=\Theta_{12}^{(3)}*\delta_1^{(4)}$.
+\subparagraph{}
+练习题：
+\begin{figure}[H]
+\center{\includegraphics[width=.6\textwidth]{524.png}}
+\label{fig:524}
+\end{figure}
+\begin{figure}[H]
+\center{\includegraphics[width=.6\textwidth]{525.png}}
+\caption{后向传播算法习题}
+\label{fig:525}
+\end{figure}
 \section{Backpropagation in Practice}
 \subsection{Implementation Note:Unrolling Parameters}
+\subparagraph{}
+在上一段视频中，我们谈到了怎么使用反向传播算法计算代价函数的导数，在这段视频中，介绍细节的实现过程，怎样把参数从矩阵展开成向量，以便我们在高级最优化步骤中的使用需要。
+\begin{figure}[H]
+\center{\includegraphics[width=.6\textwidth]{530.png}}
+\label{fig:530}
+\end{figure}
+\begin{figure}[H]
+\center{\includegraphics[width=.6\textwidth]{531.png}}
+\label{fig:531}
+\end{figure}
+\begin{figure}[H]
+\center{\includegraphics[width=.6\textwidth]{535.png}}
+\label{fig:535}
+\end{figure}
+\begin{figure}[H]
+\center{\includegraphics[width=.6\textwidth]{536.png}}
+\label{fig:536}
+\end{figure}
 \subsection{Gradient Checking}
+\subparagraph{}
+当我们对一个较为复杂的模型（例如神经网络）使用梯度下降算法时，可能存在一些不容易察觉的错误，意味着，虽然表面看起啦一直在工作，代价看上去不断的减少，但是最终的结果可能并不是最优解。
+\subparagraph{}
+为了避免这个问题，采取一种叫做梯度的数值检验（Numerical Gradient Checking）的方法，思想是通过估计梯度值来检验我们计算的导数值是否真的是我们要求的。
+\subparagraph{}
+对梯度的估计方法：在代价函数上沿着切线的方向选择两个非常近的点，然后再计算两个点的平均值，以估计梯度。
+\begin{figure}[H]
+\center{\includegraphics[width=.6\textwidth]{537.png}}
+\caption{梯度检验法}
+\label{fig:537}
+\end{figure}
+\begin{figure}[H]
+\center{\includegraphics[width=.6\textwidth]{538.png}}
+\label{fig:538}
+\end{figure}
+\subparagraph{}
+即对于某个特定的$\theta$，我们计算出在$\theta-\epsilon$处和$\theta+\epsilon$的代价函数值（ $\epsilon$ 是一个非常小的值，通常选取0.0001），然后求两个代价的平均，用以估计在$\theta$处的代价值。
+\begin{figure}[H]
+\center{\includegraphics[width=.6\textwidth]{539.png}}
+\caption{向量$\theta$}
+\label{fig:539}
+\end{figure}
+\subparagraph{}
+Octave中的代码如下：
+\begin{minted}{octave}
+gradApprox=(J(theta+eps)-J(theta-eps))/(2*eps)
+\end{minted}
+\subparagraph{}
+当$\theta$是一个向量时,则需要对偏导数进行检验。因为代价函数的偏导数检验只针对一个参数的改变进行检验,下面是一个只针对$\theta_1$进行检验的示例:
+\begin{equation}
+\frac{\partial}{\partial{\theta_1}}=\frac{j(\theta_1+\epsilon_1,\theta_2,\theta_3,...,\theta_n)-J(\theta_1-\epsilon_1,\theta_2,\theta_3,...,\theta_n)}{2\epsilon}
+\end{equation}
+\subparagraph{}
+We previously saw how to calculate the deltaVector. So once we compute our gradApprox vector, we can check that gradApprox ≈ deltaVector. 
+\subparagraph{}
+Once you have verified once that your backpropagation algorithm is correct, you don't need to compute gradApprox again. The code to compute gradApprox can be very slow.
+\begin{figure}[H]
+\center{\includegraphics[width=.6\textwidth]{540.png}}
+\label{fig:540}
+\end{figure}
+\subparagraph{}
+最后我们还需要对通过反向传播方法计算出的偏导数进行检验。
+\subparagraph{}
+根据上面的算法,计算出的偏导数存储在矩阵 $D_{ij}^{(l)}$中。检验时,将该矩阵展开成为向量,同时我们也将$\Theta$矩阵展开为向量,我们针对每一个$\Theta$都计算一个近似的梯度值,将这些值存储于一个近似梯度矩阵中,最终将得出的这个矩阵同$D_{ij}^{(l)}$进行比较。
+\begin{figure}[H]
+\center{\includegraphics[width=.6\textwidth]{540.png}}
+\label{fig:540}
+\end{figure}
+\begin{figure}[H]
+\center{\includegraphics[width=.6\textwidth]{541.png}}
+\label{fig:541}
+\end{figure}
 \subsection{Random Initialization}
 \paragraph{ }
-任何优化算法都需要一些初始的参数。到目前为止我们都是初始所有参数为 0,这样的初始方法对于逻辑回归来说是可行的,但是对于神经网络来说是不可行的。如果我们令所有
-的初始参数都为 0,这将意味着我们第二层的所有激活单元都会有相同的值。同理,如果我们初始所有的参数都为一个非 0 的数,结果也是一样的。
+\begin{figure}[H]
+\center{\includegraphics[width=.6\textwidth]{550.png}}
+\label{fig:550}
+\end{figure}
+任何优化算法都需要一些初始的参数。到目前为止我们都是初始所有参数为 0,这样的初始方法对于逻辑回归来说是可行的,但是对于神经网络来说是不可行的。如果我们令所有的初始参数都为 0,这将意味着我们第二层的所有激活单元都会有相同的值（对称化）。同理,如果我们初始所有的参数都为一个非 0 的数,结果也是一样的。
+\begin{figure}[H]
+\center{\includegraphics[width=.6\textwidth]{552.png}}
+\label{fig:552}
+\end{figure}
 \paragraph{}
+Initializing all theta weights to zero does not work with neural networks. When we backpropagate, all nodes will update to the same value repeatedly. Instead we can randomly initialize our weights for our Θ matrices using the following method:
 通常初始参数为正负 ε 之间的随机值,假设我们要随机初始一个尺寸为 10×11 的参数矩阵,代码如下:
     \begin{minted}{octave}
      Theta1 = rand(10, 11) * (2*eps) - eps
     \end{minted}
+\subparagraph{}
+Hence, we initialize each $\Theta_{ij}^{(l)}$ to a random value between $[-\epsilon,\epsilon]$. Using the above formula guarantees that we get the desired bound. The same procedure applies to all the $\Theta$'s. Below is some working code you could use to experiment.
+\begin{figure}[H]
+\center{\includegraphics[width=.8\textwidth]{559.png}}
+\label{fig:559}
+\end{figure}
+\subparagraph{}
+rand(x,y) is just a function in octave that will initialize a matrix of random real numbers between 0 and 1.
+\subparagraph{}
+(Note: the epsilon used above is unrelated to the epsilon from Gradient Checking)
+\begin{figure}[H]
+\center{\includegraphics[width=.6\textwidth]{553.png}}
+\label{fig:553}
+\end{figure}
+\begin{figure}[H]
+\center{\includegraphics[width=.6\textwidth]{556.png}}
+\label{fig:556}
+\end{figure}
 \subsection{Putting it Together}
+\begin{figure}[H]
+\center{\includegraphics[width=.6\textwidth]{560.png}}
+\caption{训练神经网络}
+\label{fig:560}
+\end{figure}
 使用神经网络的步骤：
 \paragraph{}
 网络结构：第一件要做的事是选择网络结构，即决定选择多少层以及决定每层分别有多少个单元。
@@ -275,7 +426,30 @@ Theta1=reshape(thetaVec(221:231,1,11));
 \paragraph{}
 我们真正要决定的是隐藏层的层数和每个中间层的单元数。
 \subparagraph{}
-训练神经网络：
+\begin{figure}[H]
+\center{\includegraphics[width=.6\textwidth]{561.png}}
+\label{fig:561}
+\end{figure}
+\begin{figure}[H]
+\center{\includegraphics[width=.6\textwidth]{562.png}}
+\caption{训练神经网络步骤}
+\label{fig:562}
+\end{figure}
+\subparagraph{}
+注意：$J(\Theta)$是一个non-convex函数（非凸函数），理论上都能都优化到最小值。
+\begin{figure}[H]
+\center{\includegraphics[width=.6\textwidth]{570.png}}
+\caption{神经网络的梯度下降算法的实现}
+\label{fig:570}
+\end{figure}
+\subparagraph{}
+Ideally, you want $h_\Theta(x^{(i)})\approx{y^{(i)}}$. This will minimize our cost function. However, keep in mind that $J(\Theta)$ is not convex and thus we can end up in a local minimum instead. 
+\begin{figure}[H]
+\center{\includegraphics[width=.6\textwidth]{571.png}}
+\label{fig:571}
+\end{figure}
+\subparagraph{}
+训练神经网络的步骤：
 \subparagraph{}
 （1）参数的随机初始化
 \subparagraph{}

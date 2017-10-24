@@ -1,0 +1,136 @@
+\documentclass{article}
+\usepackage{CJKutf8}
+\usepackage{minted}
+\usepackage{geometry}
+\geometry{a4paper,centering,scale=0.8}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{textcomp}
+\usepackage{amsthm}
+\usepackage{amssymb}
+\usepackage{float}
+%可能用到的包
+\title{Machine Learning - Week 6}
+\author{赵燕}
+\date{}
+\begin{document} 
+\hfuzz=\maxdimen
+\tolerance=10000
+\hbadness=10000
+\begin{CJK}{UTF8}{gbsn} 
+\maketitle
+\renewcommand\contentsname{目录}
+\renewcommand\figurename{图}
+\tableofcontents
+\newpage
+
+\section{Evalutaing a Learning Algorithm}
+\subsection{Deciding What to Try Next}
+\begin{figure}[H]
+\center{\includegraphics[width=.8\textwidth]{601.png}}
+\label{fig:601}
+\end{figure}
+\subparagraph{}
+机器学习诊断法：
+\begin{figure}[H]
+\center{\includegraphics[width=.8\textwidth]{602.png}}
+\caption{机器学习诊断法}
+\label{fig:602}
+\end{figure}
+\begin{figure}[H]
+\center{\includegraphics[width=.8\textwidth]{603.png}}
+\label{fig:603}
+\end{figure}
+\subsection{Evaluating a Hypothesis}
+\subparagraph{}
+怎样用你学过的算法来评估假设函数。
+\begin{figure}[H]
+\center{\includegraphics[width=.8\textwidth]{604.png}}
+\label{fig:604}
+\end{figure}
+\subparagraph{}
+当确定学习算法的参数的时候，我们考虑的是选择参量来使训练误差最小化，有人
+认为得到一个非常小的训练误差一定是一件好事，但已经知道，仅仅是因为这个假设具
+有很小的训练误差，并不能说明它就一定是一个好的假设函数。而且也学习了过拟合假
+设函数的例子，所以这推广到新的训练集上是不适用的。
+\subparagraph{}
+那么，该如何判断一个假设函数是过拟合的呢？对于这个简单的例子，我们可以对假
+设函数 h(x) 进行画图，然后观察图形趋势,但对于特征变量不止一个的这种一般情况，还
+有像有很多特征变量的问题，想要通过画出假设函数来进行观察，就会变得很难甚至是不可
+能实现。
+\subparagraph{}
+因此，需要另一种方法来评估我们的假设函数过拟合检验。
+\begin{figure}[H]
+\center{\includegraphics[width=.8\textwidth]{604.png}}
+\caption{训练集和测试集}
+\label{fig:604}
+\end{figure}
+\subparagraph{}
+\begin{figure}[H]
+\center{\includegraphics[width=.6\textwidth]{606.png}}
+\label{fig:606}
+\end{figure}
+\subparagraph{}
+按如下步骤训练和测试学习算法：
+\begin{figure}[H]
+\center{\includegraphics[width=.8\textwidth]{608.png}}
+\caption{训练集和测试集}
+\label{fig:608}
+\end{figure}
+\subsubsection{Evaluating a Hypothesis}
+\subparagraph{}
+Once we have done some trouble shooting for errors in our predictions by: 
+\begin{itemize}
+\item Getting more training examples
+\item Trying smaller sets of features
+\item Trying additional features
+\item Trying polynomial features
+\item Increasing or decreasing λ
+\end{itemize}
+\subparagraph{}
+We can move on to evaluate our new hypothesis. 
+\subparagraph{}
+A hypothesis may have a low error for the training examples but still be inaccurate (because of overfitting). Thus, to evaluate a hypothesis, given a dataset of training examples, we can split up the data into two sets: a training set and a test set. Typically, the training set consists of 70 \%{} of your data and the test set is the remaining 30 \%{}. 
+\paragraph{}
+The new procedure using these two sets is then:
+\subparagraph{}
+1.Learn $\Theta$ and minimize $J_{train}(\Theta)$ using the training set
+\subparagraph{}
+2.Compute the test set error $J_{test}(\Theta)$
+\subsubsection{The test set error}
+\subparagraph{}
+1.For linear regression，利用测试集数据计算代价函数：
+\begin{equation}
+J_{test}(\Theta)=\frac{1}{2m_{test}}\sum_{i=1}^{m_{test}}(h_\Theta(x_{test}^{(i)})-y_{test}^{(i)})^2
+\end{equation}
+\subparagraph{}
+2.For classification ~ Misclassification error (aka 0/1 misclassification error):（误分率）
+\begin{figure}[H]
+\center{\includegraphics[width=.6\textwidth]{609.png}}
+\label{fig:609}
+\end{figure}
+\subparagraph{}
+然后对计算结果求平均。
+\subparagraph{}
+This gives us a binary 0 or 1 error result based on a misclassification. The average test error for the test set is:
+\begin{equation}
+{Test}\quad{Error}=\frac{1}{m_{test}}\sum_{i=1}^{m_{test}}err(h_\Theta(x_{test}^{(i)}),y_{test}^{(i)})
+\end{equation}
+\subparagraph{}
+This gives us the proportion of the test data that was misclassified.
+\subsection{Model Section and Train/Validation/Test Sets}
+\section{Bias vs. Variance}
+\subsection{Diagnosing Bias vs. Variance}
+\subsection{Regularization and Bias/Variance}
+\subsection{Learning Curves}
+\subsection{Deciding What to Do Next Revisited}
+\section{Building a Spam Classifier}
+\subsection{Prioritizing What to Work On}
+\subsection{Error Analysis}
+\section{Handing Skewed Data}
+\subsection{Error Metrics for Skewed Classes}
+\subsection{Trading Off Precision and Recall}
+\section{Using Large Data Sets}
+\subsection{Data For Machine Learning}
+\end{CJK}
+\end{document}

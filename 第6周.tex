@@ -119,11 +119,325 @@ This gives us a binary 0 or 1 error result based on a misclassification. The ave
 \subparagraph{}
 This gives us the proportion of the test data that was misclassified.
 \subsection{Model Section and Train/Validation/Test Sets}
+\subparagraph{}
+（模型选择）怎样选择正确的特征来构造学习算法或者正确选择学习算法中的正则化参数$\lambda$：
+\begin{figure}[H]
+\center{\includegraphics[width=.6\textwidth]{610.png}}
+\label{fig:610}
+\caption{过拟合示例}
+\end{figure}
+\begin{figure}[H]
+\center{\includegraphics[width=.6\textwidth]{611.png}}
+\label{fig:611}
+\caption{模型选择}
+\end{figure}
+\begin{figure}[H]
+\center{\includegraphics[width=.6\textwidth]{612.png}}
+\label{fig:612}
+\caption{训练集，交叉验证集和测试集}
+\end{figure}
+\begin{figure}[H]
+\center{\includegraphics[width=.6\textwidth]{613.png}}
+\label{fig:613}
+\caption{训练，交叉验证和测试误差}
+\end{figure}
+\begin{figure}[H]
+\center{\includegraphics[width=.6\textwidth]{615.png}}
+\label{fig:615}
+\caption{模型选择}
+\end{figure}
+\begin{figure}[H]
+\center{\includegraphics[width=.6\textwidth]{616.png}}
+\label{fig:616}
+\end{figure}
+\subparagraph{}
+Just because a learning algorithm fits a training set well, that does not mean it is a good hypothesis. It could over fit and as a result your predictions on the test set would be poor. The error of your hypothesis as measured on the data set with which you trained the parameters will be lower than the error on any other data set. 
+\subparagraph{}
+Given many models with different polynomial degrees, we can use a systematic approach to identify the 'best' function. In order to choose the model of your hypothesis, you can test each degree of polynomial and look at the error result.
+\subparagraph{}
+One way to break down our dataset into the three sets is:
+\begin{itemize}
+\item Training set: 60%
+\item Cross validation set: 20%
+\item Test set: 20%
+\end{itemize}
+\subparagraph{}
+We can now calculate three separate error values for the three different sets using the following method:
+\begin{itemize}
+\item     Optimize the parameters in Θ using the training set for each polynomial degree.
+\item Find the polynomial degree d with the least error using the cross validation set.
+\item Estimate the generalization error using the test set with $J_{test}(\Theta^{(d)})$, (d = theta from polynomial with lower error);
+\subparagraph{}
+This way, the degree of the polynomial d has not been trained using the test set.
+\end{itemize}
 \section{Bias vs. Variance}
 \subsection{Diagnosing Bias vs. Variance}
+\subparagraph{}
+判断一个算法是偏差还是方差问题：
+\begin{figure}[H]
+\center{\includegraphics[width=.6\textwidth]{617.png}}
+\label{fig:617}
+\caption{Bias/variance}
+\end{figure}
+\begin{figure}[H]
+\center{\includegraphics[width=.6\textwidth]{619.png}}
+\label{fig:619}
+\caption{Bias/variance error}
+\end{figure}
+\subparagraph{}
+如何判断此时的算法处于哪个状态？
+\begin{figure}[H]
+\center{\includegraphics[width=.6\textwidth]{620.png}}
+\label{fig:620}
+\caption{Diagnosing Bias/variance}
+\end{figure}
+\begin{figure}[H]
+\center{\includegraphics[width=.6\textwidth]{621.png}}
+\label{fig:621}
+\end{figure}
+\subparagraph{}
+In this section we examine the relationship between the degree of the polynomial d and the underfitting or overfitting of our hypothesis.
+\begin{itemize}
+\item We need to distinguish whether bias or variance is the problem contributing to bad predictions.
+\item High bias is underfitting and high variance is overfitting. Ideally, we need to find a golden mean between these two.
+\end{itemize}
+\subparagraph{}
+The training error will tend to decrease as we increase the degree d of the polynomial.
+\subparagraph{}
+At the same time, the cross validation error will tend to decrease as we increase d up to a point, and then it will increase as d is increased, forming a convex curve.
+\subparagraph{}
+High bias (underfitting): both $J_{train}(\Theta)$ and $J_{CV}(\Theta)$ will be high. Also, $J_{CV}(\Theta)\approx{J_{train}(\Theta)}$.
+\subparagraph{}
+High variance (overfitting): $J_{train}(\Theta)$ will be low and $J_{CV}(\Theta)$ will be much greater than $J_{train}(\Theta)$.
+\subparagraph{}
+The is summarized in the figure below:
+\begin{figure}[H]
+\center{\includegraphics[width=.5\textwidth]{625.png}}
+\label{fig:625}
+\caption{Diagnosing Bias/variance}
+\end{figure}
 \subsection{Regularization and Bias/Variance}
+\subparagraph{}
+算法正则化与方差偏差的关系：
+\begin{figure}[H]
+\center{\includegraphics[width=.6\textwidth]{627.png}}
+\label{fig:627}
+\caption{线性回归与正则化}
+\end{figure}
+\begin{figure}[H]
+\center{\includegraphics[width=.6\textwidth]{628.png}}
+\label{fig:628}
+\end{figure}
+\subparagraph{}
+In the figure above, we see that as λ increases, our fit becomes more rigid. On the other hand, as λ approaches 0, we tend to over overfit the data. So how do we choose our parameter λ to get it 'just right' ? In order to choose the model and the regularization term λ, we need to:
+\subparagraph{}
+1.Create a list of lambdas (i.e. λ∈{0,0.01,0.02,0.04,0.08,0.16,0.32,0.64,1.28,2.56,5.12,10.24});
+\subparagraph{}
+2.Create a set of models with different degrees or any other variants.
+\subparagraph{}
+3.Iterate through the λs and for each λ go through all the models to learn some $\Theta$.
+\subparagraph{}
+4.Compute the cross validation error using the learned $\Theta$ (computed with λ) on the $J_{CV}(\Theta)$ without regularization or λ = 0.
+\subparagraph{}
+5.Select the best combo that produces the lowest error on the cross validation set.
+\subparagraph{}
+6.Using the best combo $\Theta$ and λ, apply it on $J_{test}(\Theta)$ to see if it has a good generalization of the problem.
+\subparagraph{}
+当改变$\lambda$时，交叉验证集误差和训练集误差会发生怎样的变化？
+\subparagraph{}
+我们选择一系列的想要测试的 λ 值,通常是 0-10 之间的呈现 2 倍关系的值(如:
+0,0.01,0.02,0.04,0.08,0.15,0.32,0.64,1.28,2.56,5.12,10 共 12 个)。 我们同样把数据分为训练
+集、交叉验证集和测试集。
+\begin{figure}[H]
+\center{\includegraphics[width=.6\textwidth]{630.png}}
+\label{fig:630}
+\caption{选择合适的正则化参数$\lambda$}
+\end{figure}
+\subparagraph{}
+选择$\lambda$的方法是：
+\subparagraph{}
+1. 使用训练集训练出 12 个不同程度正则化的模型
+\subparagraph{}
+2. 用 12 模型分别对交叉验证集计算的出交叉验证误差
+\subparagraph{}
+3. 选择得出交叉验证误差最小的模型
+\subparagraph{}
+4. 运用步骤 3 中选出模型对测试集计算得出推广误差,我们也可以同时将训练集和交叉验证集模型的代价函数误差与 λ 的值绘制在一张图表上:
+\begin{figure}[H]
+\center{\includegraphics[width=.6\textwidth]{633.png}}
+\label{fig:633}
+\caption{正则化参数$\lambda$与偏差和方差}
+\end{figure}
+\subparagraph{}
+\begin{itemize}
+\item 当 λ 较小时,训练集误差较小(过拟合)而交叉验证集误差较大
+\item 随着 λ 的增加,训练集误差不断增加(欠拟合),而交叉验证集误差则是先减小后
+增加
+\end{itemize}
+\begin{figure}[H]
+\center{\includegraphics[width=.8\textwidth]{631.png}}
+\label{fig:631}
+\end{figure}
+\begin{figure}[H]
+\center{\includegraphics[width=.2\textwidth]{632.png}}
+\label{fig:632}
+\end{figure}
 \subsection{Learning Curves}
+\subparagraph{}
+学习曲线就是一种很好的工具,我经常使用学习曲线来判断某一个学习算法是否处于偏
+差、方差问题。学习曲线是学习算法的一个很好的合理检验(sanity check)。学习曲线是将训练集误差和交叉验证集误差作为训练集实例数量(m)的函数绘制的图表。
+\subparagraph{}
+即,如果我们有 100 行数据,我们从 1 行数据开始,逐渐学习更多行的数据。
+\subparagraph{}
+思想是:当训练较少行数据的时候,训练的模型将能够非常完美地适应较少的训练数据,但是训练出来的模型却不能很好地适应交叉验证集数据或测试集数据。
+\begin{figure}[H]
+\center{\includegraphics[width=.8\textwidth]{635.png}}
+\label{fig:635}
+\caption{学习曲线}
+\end{figure}
+\subparagraph{}
+Training an algorithm on a very few number of data points (such as 1, 2 or 3) will easily have 0 errors because we can always find a quadratic curve that touches exactly those number of points. Hence:
+\subparagraph{}
+1.As the training set gets larger, the error for a quadratic function increases.
+\subparagraph{}
+2.The error value will plateau out after a certain m, or training set size.
+\subparagraph{}
+1.训练集误差随着m的增大而增大
+\subparagraph{}
+2.当训练集较小时，泛化程度不会很好，不能很好的适应新样本，因此这个假设不是一个理想的假设，只有当我使用一个更大的训练集时，才有可能得到一个能够更好拟合数据的 可能的假设，因此验证集误差和测试集误差都会随着训练集样本容量m的增加而减小，因为使用的数据越，越能获得更好地泛化表现，或者说对新样本的适应能力更强，因此数据越多 越能拟合出合适的假设。
+\subparagraph{}
+当处于高方差或者高偏差的情况时这些曲线又会变成什么样子？
+\subsubsection{High bias}
+\begin{figure}[H]
+\center{\includegraphics[width=.8\textwidth]{636.png}}
+\label{fig:636}
+\caption{高偏差学习曲线}
+\end{figure}
+\subparagraph{}
+最左端表示训练集样本容量很小，比如说只有一组样本，那么表现当然很不好，而随着你增大训练集样本数，当达到某一个容量值的时候 你就会找到那条最有可能拟合数据的那条线，并且此时即便你继续增大训练集的样本容量， 即使你不断增大m的值，你基本上还是会得到的一条差不多的直线，因此交叉验证集误差 我把它标在这里，或者测试集误差，将会很快变为水平而不再变化。只要训练集样本容量值达到或超过了那个特定的数值，交叉验证集误差和测试集误差就趋于不变，这样你会得到最能拟合数据的那条直线；
+\subparagraph{}
+那么，训练误差又如何呢？
+\subparagraph{}
+在高偏差的情形中，你会发现训练集误差会逐渐增大，一直趋于接近交叉验证集误差，这是因为你的参数很少，但当m很大的时候，数据太多，此时训练集和交叉验证集的预测效果将会非常接近。
+\subparagraph{}
+高偏差的情形反映出的问题是,交叉验证集和训练集误差都很大,也就是说,你最终会得到一个值比较大$J_{CV}(\Theta)$和$J_{train}(\Theta)$。
+\subparagraph{}
+Low training set size: causes $J_{train}(\Theta)$ to be low and $J_{CV}(\Theta)$ to be high.
+\subparagraph{}
+Large training set size: causes both $J_{train}(\Theta)$ and $J_{CV}(\Theta)$ to be high with $J_{train}(\Theta)\approx{J_{CV}(\Theta)}$.
+\subparagraph{}
+If a learning algorithm is suffering from high bias, getting more training data will not (by itself) help much.
+\begin{figure}[H]
+\center{\includegraphics[width=.4\textwidth]{640.png}}
+\label{fig:640}
+\caption{高偏差学习曲线}
+\end{figure}
+\subsubsection{High variance}
+\subparagraph{}
+Low training set size: $J_{train}(\Theta)$ will be low and $J_{CV}(\Theta)$ will be high.
+\subparagraph{}
+Large training set size: $J_{train}(\Theta)$ increases with training set size and $J_{CV}(\Theta)$ continues to decrease without leveling off. Also, $J_{train}(\Theta)<{J_{CV}(\Theta)}$ but the difference between them remains significant.
+\subparagraph{}
+If a learning algorithm is suffering from high variance, getting more training data is likely to help.
+\begin{figure}[H]
+\center{\includegraphics[width=.4\textwidth]{641.png}}
+\label{fig:641}
+\caption{高方差学习曲线1}
+\end{figure}
+\begin{figure}[H]
+\center{\includegraphics[width=.8\textwidth]{637.png}}
+\label{fig:637}
+\caption{高方差学习曲线2}
+\end{figure}
+\subparagraph{}
+如果继续增大训练样本的数量，将曲线向右延伸，交叉验证集误差将会逐渐下降，所以在高方差的情形中，使用更多的训练集数据对改进算法的表现，事实上是有效果的，这同样也体现出，知道你的算法正处于高方差的情形也是非常有意义的，因为它能告诉你，是否有必要花时间来增加更多的训练集数据。
+\subparagraph{}
+\begin{figure}[H]
+\center{\includegraphics[width=.6\textwidth]{638.png}}
+\label{fig:638}
+\end{figure}
 \subsection{Deciding What to Do Next Revisited}
+\subparagraph{}
+我们已经介绍了怎样评价一个学习算法,我们讨论了模型选择问题,偏差和方差的问题。
+那么这些诊断法则怎样帮助我们判断,哪些方法可能有助于改进学习算法的效果,而哪些可
+能是徒劳的呢?
+\subparagraph{}
+\begin{figure}[H]
+\center{\includegraphics[width=.8\textwidth]{643.png}}
+\label{fig:643}
+\end{figure}
+让我们再次回到最开始的例子,在那里寻找答案,这就是我们之前的例子。回顾之前所学的
+提出的六种可选的下一步,让我们来看一看我们在什么情况下应该怎样选择:
+\subparagraph{}
+1.获得更多的训练实例——解决高方差
+\subparagraph{}
+2. 尝试减少特征的数量——解决高方差
+\subparagraph{}
+3. 尝试获得更多的特征——解决高偏差
+\subparagraph{}
+4. 尝试增加多项式特征——解决高偏差
+\subparagraph{}
+5. 尝试减少正则化程度 λ——解决高偏差
+\subparagraph{}
+6. 尝试增加正则化程度 λ——解决高方差
+\subparagraph{}
+\begin{figure}[H]
+\center{\includegraphics[width=.6\textwidth]{649.png}}
+\label{fig:649}
+\caption{诊断神经网络}
+\end{figure}
+\subparagraph{}
+A neural network with fewer parameters is prone to underfitting. It is also computationally cheaper.
+\subparagraph{}
+A large neural network with more parameters is prone to overfitting. It is also computationally expensive. In this case you can use regularization (increase λ) to address the overfitting.
+\subparagraph{}
+一般来说,使用一个大型的神经网络并使用正则化来修正过拟合问题,通常比使用一个小型的神经网络效果更好,但主要可能出现的问题 是计算量相对较大,最后还需要选择隐藏层的层数，你是应该用一个隐藏层呢，还是应该用三个呢，就像我们这里画的，或者还是用两个隐藏层呢 ？
+\subparagraph{}
+Using a single hidden layer is a good starting default. You can train your neural network on a number of hidden layers using your cross validation set. You can then select the one that performs best. 
+\subparagraph{}
+通常来说,正如我在前面的视频中讲过的,默认的情况是 ,使用一个隐藏层 ,但是如果你确实想要选择多个隐藏层 ,你也可以试试把数据分割为训练集, 验证集和测试集 ,然后使用交叉验证的方法 ,比较一个隐藏层的神经网络 ,然后试试两个 ,三个隐藏层 ,以此类推 ,然后看看哪个神经网络 ,在交叉验证集上表现得最理想 ,也就是说 ,你得到了三个神经网络模型 ,分别有一个 ,两个, 三个隐藏层 ,然后你对每一个模型都用交叉验证集数据进行测试 ,算出三种情况下的 ,交叉验证集误差$J_{CV}(\Theta)$然后选出你认为最好的神经网络结构。
+\subparagraph{}
+这就是偏差和方差问题以及诊断该问题的学习曲线方法，在改进学习算法的表现时 ，你可以充分运用以上这些内容来判断哪些途径可能是有帮助的，而哪些方法可能是无意义的。 
+\subparagraph{}
+Model Complexity Effects:
+\begin{itemize}
+\item Lower-order polynomials (low model complexity) have high bias and low variance. In this case, the model fits poorly consistently.
+\item Higher-order polynomials (high model complexity) fit the training data extremely well and the test data extremely poorly. These have low bias on the training data, but very high variance.
+\item In reality, we would want to choose a model somewhere in between, that can generalize well but also fits the data reasonably well.
+\end{itemize}
+\begin{figure}[H]
+\center{\includegraphics[width=.6\textwidth]{650.png}}
+\label{fig:650}
+\end{figure}
+\begin{figure}[H]
+\center{\includegraphics[width=.6\textwidth]{651.png}}
+\label{fig:651}
+\end{figure}
+\begin{figure}[H]
+\center{\includegraphics[width=.6\textwidth]{652.png}}
+\label{fig:652}
+\end{figure}
+\begin{figure}[H]
+\center{\includegraphics[width=.6\textwidth]{653.png}}
+\label{fig:653}
+\end{figure}
+\begin{figure}[H]
+\center{\includegraphics[width=.6\textwidth]{654.png}}
+\label{fig:654}
+\end{figure}
+\begin{figure}[H]
+\center{\includegraphics[width=.6\textwidth]{655.png}}
+\label{fig:655}
+\end{figure}
+\begin{figure}[H]
+\center{\includegraphics[width=.6\textwidth]{656.png}}
+\label{fig:656}
+\end{figure}
+\begin{figure}[H]
+\center{\includegraphics[width=.6\textwidth]{657.png}}
+\label{fig:657}
+\caption{此题有误}
+\end{figure}
 \section{Building a Spam Classifier}
 \subsection{Prioritizing What to Work On}
 \subsection{Error Analysis}

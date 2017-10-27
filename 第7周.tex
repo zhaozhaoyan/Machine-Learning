@@ -343,8 +343,256 @@ $x^{(1)}$,当我将它投影到横轴 x 上,或说投影到 θ 上,就会得到�
 \end{figure}
 \section{Kernels}
 \subsection{Kernels I}
+\subparagraph{}
+回顾我们之前讨论过可以使用高级数的多项式模型来解决无法用直线进行分隔的分类问题:
+\begin{figure}[H]
+\center{\includegraphics[width=.6\textwidth]{730.png}}
+\label{fig:730}
+\caption{非线性决策边界}
+\end{figure}
+\subparagraph{}
+为了获得上图所示的判定边界,我们的模型可能是$\theta_0+\theta_1x_1+\theta_2x_2+\theta_3x_1x_2+\theta_4x_1^2+\theta_5x_2^2+...$的形式。
+\subparagraph{}
+我们可以用一系列的新的特征 f 来替换模型中的每一项。例如令:
+$f_1=x_1,f_2=x_2,f_3=x_1x_2,f_4=x_1^2,f_5=x_2^2,....$,得到$h_\theta(x)=f_1+f_2+...+f_n$。
+\subparagraph{}
+然而,除了对原有的特征进行组合以外,有没有更好的方法来
+构造$f_1,f_2,f_3$,我们可以利用核函数来计算出新的特征。
+\subparagraph{}
+给定一个训练实例 x,我们利用 x 的各个特征与我们预先选定的地标(landmarks) ,$l^{(1)}$ ,$l^{(2)}$ ,$l^{(3)}$的近似程度来选取新的特征$f_1,f_2,f_3$ 。
+\begin{figure}[H]
+\center{\includegraphics[width=.6\textwidth]{731.png}}
+\label{fig:731}
+\caption{高斯核函数}
+\end{figure}
+\subparagraph{}
+例如：
+\begin{equation}
+f_1=similarity(x,l^{(1)})=e^{(-\frac{{\parallel{x-l^{(1)}}\parallel}^2}{2{\sigma}^2})}
+\end{equation}
+\subparagraph{}
+其中，${\parallel{x-l^{(1)}}\parallel}^2=\sum_{j=1}^n(x_j-l_j^{(1)})^2$，为实例 x 中所有特征与地标$l^{(1)}$之间的距离的和。上例中的 similarity(x,$l^{(1)}$)就是核函数,具体而言,这里是一个高斯核函数(Gaussian Kernel)。 注:这个函数与正态分布没什么实际上的关系,只是看上去像而已。
+\subparagraph{}
+这些地标的作用是什么?如果一个训练实例 x 与地标 L 之间的距离近似于 0,则新特征f 近似于 $e^{-0}$=1,如果训练实例 x 与地标 L 之间距离较远,则 f 近似于 $e^{-(a large number)}=0$。
+\begin{figure}[H]
+\center{\includegraphics[width=.6\textwidth]{732.png}}
+\label{fig:732}
+\end{figure}
+\subparagraph{}
+假设我们的训练实例含有两个特征[$x_1$ $x_2$],给定地标 $l^{(1)}$与不同的$\sigma$值,见下图:
+\begin{figure}[H]
+\center{\includegraphics[width=.6\textwidth]{733.png}}
+\label{fig:733}
+\end{figure}
+\subparagraph{}
+图中水平面的坐标为$x_1$ ,$x_2$而垂直坐标轴代表 f。可以看出,只有当 x 与$l^{(1)}$重合时 f 才具有最大值。随着 x 的改变 f 值改变的速率受到 $\sigma^2$的控制。
+\begin{figure}[H]
+\center{\includegraphics[width=.6\textwidth]{734.png}}
+\label{fig:734}
+\end{figure}
+\begin{figure}[H]
+\center{\includegraphics[width=.4\textwidth]{735.png}}
+\label{fig:735}
+\end{figure}
+\begin{figure}[H]
+\center{\includegraphics[width=.4\textwidth]{736.png}}
+\label{fig:736}
+\end{figure}
+\begin{figure}[H]
+\center{\includegraphics[width=.4\textwidth]{737.png}}
+\label{fig:737}
+\end{figure}
+\begin{figure}[H]
+\center{\includegraphics[width=.4\textwidth]{738.png}}
+\label{fig:738}
+\end{figure}
+\begin{figure}[H]
+\center{\includegraphics[width=.4\textwidth]{739.png}}
+\label{fig:739}
+\end{figure}
+\subparagraph{}
+在下图中,当实例处于洋红色的点位置处,因为其离 $l^{(1)}$更近,但是离 $l^{(2)}$ 和$l^{(3)}$较远,因此$f_1$接近 1,而 $f_2$,$f_3$接近 0。因此 $h_\theta(x)=\theta_0+\theta_1f_1+\theta_2f_2+\theta_3f_3>0$,因此预测 y=1。同理可以求出,对于离$l^{(2)}$较近的绿色点,也预测 y=1,当我们接近两个标记点中的任意一个，预测值会等于1，但是对于蓝绿色的点,因为其离三个地标都较远,预测 y=0。
+\begin{figure}[H]
+\center{\includegraphics[width=.5\textwidth]{740.png}}
+\label{fig:740}
+\caption{预测函数}
+\end{figure}
+\subparagraph{}
+这样,图中红色的封闭曲线所表示的范围,便是我们依据一个单一的训练实例和我们选取的地标所得出的判定边界,在预测时,我们采用的特征不是训练实例本身的特征,而是通过核函数计算出的新特征 $f_1,f_2,f_3$。
 \subsection{Kernels II}
+\subparagraph{}
+在上一节视频里,我们讨论了核函数这个想法,以及怎样利用它去实现支持向量机的一些新特性。在这一节视频中,我将补充一些缺失的细节,并简单的介绍一下怎么在实际中使用应用这些想法。
+\subparagraph{}
+如何选择标记点?
+\subparagraph{}
+我们通常是根据训练集的数量选择标记点的数量,即如果训练集中有 m 个实例,则我们选取 m 个标记点,并且令:$l^{(1)}=x^{(1)}$ ,$l^{(2)}=x^{(2)}$ ,...,$l^{(3)}=x^{(3)}$ 。这样做的好处在于:现在得到的新特征是建立在原有特征与训练集中所有其他特征之间距离的基础之上的,即:
+\begin{figure}[H]
+\center{\includegraphics[width=.4\textwidth]{747.png}}
+\label{fig:747}
+\end{figure}
+\begin{figure}[H]
+\center{\includegraphics[width=.6\textwidth]{741.png}}
+\label{fig:741}
+\caption{预测函数}
+\end{figure}
+\subparagraph{}
+样本x可以属于训练集，可以属于测试集，也可以属于交叉验证集。
+\begin{figure}[H]
+\center{\includegraphics[width=.6\textwidth]{743.png}}
+\label{fig:743}
+\caption{支持向量机的核函数}
+\end{figure}
+\subparagraph{}
+当给定核函数和相似度函数时，我们用这个方法来使用支持向量机.
+\subparagraph{}
+下面我们将核函数运用到支持向量机中,修改我们的支持向量机假设为:
+\subparagraph{}
+给定 x,计算新特征 f,当 $\theta^Tf\geqslant{0}$时,预测 y=1,否则反之。相应地修改代价函数为:
+\begin{equation}
+min_{\theta}C\sum_{i=1}^m[y^{(i)}cost_1(\theta^Tf^{(i)})+(1-y^{(i)})cost_0(\theta^Tf^{(i)})]+\frac{1}{2}\sum_{j=1}^{n=m}{\theta_j}^2
+\end{equation}
+\subparagraph{}
+有效的特征个数应该等于f的维数,所以n其实就等于m,如果愿意的话,可以认为这是一个求和 ,这确实就是j从1到m的累和 ,可以这么来看这个问题, 你可以想象, n就等于m, 因为如果f不是新的特征向量, 那么我们有m+1个特征 ,额外的1是因为截距的关系,因此这里我们仍要j从1累加到n ,与我们之前视频中讲过的正则化类似 ,我们仍然不对$\theta_0$做正则化处理 ,这就是j从1累加到m,而不是从0累加到m的原因 ,以上就是支持向量机的学习算法,我在这里还要讲到一个数学细节,在支持向量机实现的过程中,这最后一项与这里写的有细微差别,其实在实现支持向量机时,你并不需要知道这个细节,事实上这写下的这个式子已经给你提供了全部需要的原理,但是在支持向量机实现的过程中这一项 $\theta_j$从1到m的平方和。
+\subparagraph{}
+在具体实施过程中,我们还需要对最后的正则化项进行些微调整,在计算$\sum_{j=1}^{n=m}{\theta_j}^2=\theta^T\theta$时,我们用$\theta^TM\theta$代替 $\theta^T\theta$,其中 M 是根据我们选择的核函数而不同的一个矩阵。这样做的原因是为了简化计算。
+\begin{figure}[H]
+\center{\includegraphics[width=.6\textwidth]{744.png}}
+\label{fig:744}
+\caption{代价函数}
+\end{figure}
+\subparagraph{}
+理论上讲,我们也可以在逻辑回归中使用核函数,但是上面使用 M 来简化计算的方法不适用与逻辑回归,因此计算将非常耗费时间。
+\subparagraph{}
+在此,我们不介绍最小化支持向量机的代价函数的方法,你可以使用现有的软件包(如liblinear,libsvm 等)。在使用这些软件包最小化我们的代价函数之前,我们通常需要编写核函数,并且如果我们使用高斯核函数,那么在使用之前进行特征缩放是非常必要的。
+\subparagraph{}
+另外,支持向量机也可以不使用核函数,不使用核函数又称为线性核函数(linear kernel),当我们不采用非常复杂的函数,或者我们的训练集特征非常多而实例非常少的时候,可以采用这种不带核函数的支持向量机。
+\subparagraph{}
+下面是支持向量机的两个参数 C 和 σ 的影响:
+\begin{figure}[H]
+\center{\includegraphics[width=.6\textwidth]{745.png}}
+\label{fig:745}
+\caption{偏差-方差分析}
+\end{figure}
+\subparagraph{}
+C 较大时,相当于 λ 较小,可能会导致过拟合,高方差;
+\subparagraph{}
+C 较小时,相当于 λ 较大,可能会导致低拟合,高偏差;
+\subparagraph{}
+σ 较大时,导致高方差;
+\subparagraph{}
+σ 较小时,导致高偏差。
+\begin{figure}[H]
+\center{\includegraphics[width=.6\textwidth]{746.png}}
+\label{fig:746}
+\end{figure}
+\subparagraph{}
+本周的编程作业,亲自实现这些想法,并亲眼看到这些效果。这就是利用核函数的支持向量机算法,希望这些关于偏差和方差的讨论,能给你一些对于算法结果预期的直观印象。
 \section{SVMs in Practice}
 \subsection{Using An SVM}
+\subparagraph{}
+目前为止,已经讨论了 SVM 比较抽象的层面,在这个视频中我将要讨论到为了运行或者运用SVM。实际上所需要的一些东西:支持向量机算法,提出了一个特别优化的问题。但是像之前视频中提到的，不建议你自己写软件来求解参数θ,因此由于今天我们中的很少人,或者其实没有人考虑过自己写代码来转换矩阵,或求一个数的平方根等我们只是知道如何去调用库函数来实现这些功能。同样的,用以解决 SVM 最优化问题的软件很复杂,且已经有研究者做了很多年数值优化了。因此你提出好的软件库和好的软件包来做这样一些事儿。然后强烈建议使用高优化软件库中的一个,而不是尝试自己落实一些数据。有许多好的软件库,我正好用得最多的两个是 liblinear 和 libsvm,但是真的有很多软件库可以用来做这件事儿。你可以连接许多你可能会用来编写学习算法的主要编程语言。
+\begin{figure}[H]
+\center{\includegraphics[width=.6\textwidth]{748.png}}
+\label{fig:748}
+\end{figure}
+\subparagraph{}
+在使用高斯核函数之前需要做的事情：
+\begin{figure}[H]
+\center{\includegraphics[width=.6\textwidth]{749.png}}
+\label{fig:749}
+\end{figure}
+\subparagraph{}
+在高斯核函数之外我们还有其他一些选择,如:
+\subparagraph{}
+多项式核函数(Polynomial Kernel)
+\subparagraph{}
+字符串核函数(String kernel)
+\subparagraph{}
+卡方核函数( chi-square kernel)
+\subparagraph{}
+直方图交集核函数(histogram intersection kernel)
+\subparagraph{}
+等等...
+\subparagraph{}
+这些核函数的目标也都是根据训练集和标记点之间的距离来构建新特征,这些核函数需要满足Mercer's定理,才能被支持向量机的优化软件正确处理。
+\begin{figure}[H]
+\center{\includegraphics[width=.6\textwidth]{750.png}}
+\label{fig:750}
+\end{figure}
+\begin{figure}[H]
+\center{\includegraphics[width=.6\textwidth]{751.png}}
+\label{fig:751}
+\end{figure}
+\subparagraph{}
+多类分类问题
+\begin{figure}[H]
+\center{\includegraphics[width=.6\textwidth]{752.png}}
+\label{fig:752}
+\end{figure}
+\subparagraph{}
+假设我们利用之前介绍的一对多方法来解决一个多类分类问题。如果一共有 k 个类,则我们需要 k 个模型,以及 k 个参数向量 θ。我们同样也可以训练 k 个支持向量机来解决多类分类问题。但是大多数支持向量机软件包都有内置的多类分类功能,我们只要直接使用即可。
+\subparagraph{}
+尽管你不去写你自己的 SVM(支持向量机)的优化软件,但是你也需要做几件事:
+\subparagraph{}
+1、是提出参数 C 的选择。我们在之前的视频中讨论过误差和方差在这方面的性质。
+\subparagraph{}
+2、你也需要选择内核参数或你想要使用的相似函数,其中一个选择是:我们选择不需要任何内核参数,没有内核参数的理念,也叫线性核函数。因此,如果有人说他使用了线性核的 SVM(支持向量机),这就意味这他使用了不带有核函数的 SVM(支持向量机)。
+\subparagraph{}
+从逻辑回归模型,我们得到了支持向量机模型,在两者之间,我们应该如何选择呢?
+\begin{figure}[H]
+\center{\includegraphics[width=.6\textwidth]{753.png}}
+\label{fig:753}
+\end{figure}
+\subparagraph{}
+下面是一些普遍使用的准则:
+\subparagraph{}
+n为特征数(特征变量的数量),m为训练样本数。
+\subparagraph{}
+(1)如果相较于m而言,n要大许多,即训练集数据量不够支持训练一个复杂的非线性模型,我们选用逻辑回归模型或者不带核函数的支持向量机。
+\subparagraph{}
+(2)如果n较小,而且m大小中等,例如n 在 1\-{}1000 之间,而m在10\-{}10000之间,使用高斯核函数的支持向量机。
+\subparagraph{}
+(3)如果n较小,而m较大,例如n在 1-1000 之间,而m大于 50000,则使用支持向量机会非常慢,解决方案是创造、增加更多的特征,然后使用逻辑回归或不带核函数的支持向量机。
+\subparagraph{}
+值得一提的是,神经网络在以上三种情况下都可能会有较好的表现,但是训练神经网络可能非常慢,选择支持向量机的原因主要在于它的代价函数是凸函数,不存在局部最小值。
+\subparagraph{}
+今天的SVM包会工作得很好,但是它们仍然会有一些慢。当你有非常非常大的训练集,且用高斯核函数是在这种情况下,我经常会做的是尝试手动地创建,拥有更多的特征变量,然后用逻辑回归或者不带核函数的支持向量机。如果你看到这个幻灯片,看到了逻辑回归,或者不带核函数的支持向量机。在这个两个地方,我把它们放在一起是有原因的。
+\subparagraph{}
+原因是:逻辑回归和不带核函数的支持向量机它们都是非常相似的算法,不管是逻辑回归还是不带核函数的 SVM,通常都会做相似的事情,并给出相似的结果。但是根据你实现的情况,其中一个可能会比另一个更加有效。但是在其中一个算法应用的地方,逻辑回归或不带核函数的SVM ,另一个也很有可能很有效。但是随着 SVM 的复杂度增加,当你使用不同的内核函数来学习复杂的非线性函数时,这个体系,你知道的,当你有多达 1万(10,000)的样本时,也可能是 5 万(50,000),你的特征变量的数量这是相当大的。那是一个非常常见的体系,也许在这个体系里,不带核函数的支持向量机就会表现得相当突出。你可以做比这困难得多需要逻辑回归的事情。
+\subparagraph{}
+最后,神经网络使用于什么时候呢? 对于所有的这些问题,对于所有的这些不同体系一个设计得很好的神经网络也很有可能会非常有效。
+\subparagraph{}
+有一个缺点是,或者说是有时可能不会使用神经网络的原因是:对于许多这样的问题,神经网络训练起来可能会特别慢,但是如果你有一个非常好的 SVM 实现包,它可能会运行得比较快比神经网络快很多,尽管我们在此之前没有展示,但是事实证明,SVM 具有的优化问题,是一种凸优化问题。因此,好的 SVM优化软件包总是会找到全局最小值,或者接近它的值。对于 SVM 你不需要担心局部最优。
+\subparagraph{}
+在实际应用中,局部最优不是神经网络所需要解决的一个重大问题,所以这是你在使用 SVM的时候不需要太去担心的一个问题。根据你的问题,神经网络可能会比 SVM 慢,尤其是在这样一个体系中,至于这里给出的参考,看上去有些模糊,如果你在考虑一些问题,这些参考会有一些模糊,但是我仍然不能完全确定,我是该用这个算法还是改用那个算法,这个没有太大关系,当我遇到机器学习问题的时候,有时它确实不清楚这是否是最好的算法,但是
+就如在之前的视频中看到的算法确实很重要。但是通常更加重要的是:你有多少数据,你有多熟练是否擅长做误差分析和排除学习算法,指出如何设定新的特征变量和找出其他能决定你学习算法的变量等方面,通常这些方面会比你使用逻辑回归还是 SVM 这方面更加重要。但是,已经说过了,SVM 仍然被广泛认为是一种最强大的学习算法,这是一个体系,包含了什么时候一个有效的方法去学习复杂的非线性函数。因此,实际上与逻辑回归神经网络 SVM一起使用这些方法来提高学习算法,我认为你会很好地建立很有技术的状态。
+\subparagraph{}
+机器学习系统对于一个宽泛的应用领域来说,这是另一个在你军械库里非常强大的工具,你可以把它应用到很多地方,如硅谷、在工业、学术等领域建立许多高性能的机器学习系统。
+\subparagraph{}
+课后作业练习题：
+\begin{figure}[H]
+\center{\includegraphics[width=.6\textwidth]{760.png}}
+\label{fig:760}
+\end{figure}
+\begin{figure}[H]
+\center{\includegraphics[width=.6\textwidth]{761.png}}
+\label{fig:761}
+\end{figure}
+\begin{figure}[H]
+\center{\includegraphics[width=.6\textwidth]{762.png}}
+\label{fig:762}
+\end{figure}
+\begin{figure}[H]
+\center{\includegraphics[width=.6\textwidth]{763.png}}
+\label{fig:763}
+\end{figure}
+\begin{figure}[H]
+\center{\includegraphics[width=.6\textwidth]{764.png}}
+\label{fig:764}
+\end{figure}
+\begin{figure}[H]
+\center{\includegraphics[width=.6\textwidth]{765.png}}
+\label{fig:765}
+\end{figure}
 \end{CJK}
 \end{document}
